@@ -30,7 +30,7 @@ class SQLiteService:
                 CREATE TABLE IF NOT EXISTS blocks (
                     blockNumber INTEGER, 
                     transactionIndex INTEGER, 
-                    weiValue INTEGER,
+                    weiValue BIGINT,
                     PRIMARY KEY (blockNumber, transactionIndex)
                 )""")
             self.connection.commit()
