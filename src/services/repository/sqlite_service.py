@@ -63,10 +63,14 @@ class SQLiteService:
         ##TODO: fix this query, read problem again
         self.cursor.execute("""
                 SELECT
-                    blockNumber, MAX(weiValue)
+                    blockNumber, SUM(weiValue) as totalValue
                 FROM
                     blocks
-                GROUP BY blockNumber
-                """)
+                GROUP BY
+                    blockNumber
+                ORDER BY
+                    totalValue DESC
+                LIMIT 1
+            """)
         rows = self.cursor.fetchall()
         return rows
