@@ -59,14 +59,14 @@ class SQLiteService:
                     exit(e)
         self.connection.commit()
 
-    def getMaxWei(self, firstBlock, lastBlock):
+    def getBlockWithMaxWei(self, firstBlock, lastBlock):
+        ##TODO: fix this query, read problem again
         self.cursor.execute("""
                 SELECT
-                    blockNumber, transactionIndex
+                    blockNumber, MAX(weiValue)
                 FROM
                     blocks
-                WHERE
-                    weiValue = (SELECT MAX(weiValue) FROM blocks);
+                GROUP BY blockNumber
                 """)
         rows = self.cursor.fetchall()
         return rows

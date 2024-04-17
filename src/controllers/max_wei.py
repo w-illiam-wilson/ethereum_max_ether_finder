@@ -4,6 +4,7 @@ from src.services.block_crawler.block_crawler_service import BlockCrawlerService
 from src.util.validator import validateAndTransformParameters, validateArgLength
 
 def getMaxWei():
+    print("Getting max wei in block range...")
     validateArgLength()
     url: str = sys.argv[1]
     sqliteDbFile: str = sys.argv[2]
@@ -12,4 +13,4 @@ def getMaxWei():
     validateAndTransformParameters(request)
 
     blockCrawlerService = BlockCrawlerService(request.url, request.databaseFile)
-    print(blockCrawlerService.getMaxWei(request.firstBlock, request.lastBlock))
+    print(blockCrawlerService.getBlockWithMaxWei(request.firstBlock, request.lastBlock))

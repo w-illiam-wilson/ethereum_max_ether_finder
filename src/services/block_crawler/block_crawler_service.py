@@ -14,5 +14,5 @@ class BlockCrawlerService:
             block = self.ethereumService.getBlock(blockNumber)["result"]
             self.sqLiteService.insertBlockIntoDatabase(block)
 
-    def getMaxWei(self, firstBlock: int, lastBlock: int):
-        return self.sqLiteService.getMaxWei(firstBlock, lastBlock)
+    def getBlockWithMaxWei(self, firstBlock: int, lastBlock: int):
+        return self.sqLiteService.getBlockWithMaxWei(firstBlock, lastBlock)

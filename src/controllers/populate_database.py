@@ -4,6 +4,7 @@ from src.services.block_crawler.block_crawler_service import BlockCrawlerService
 from src.util.validator import validateAndTransformParameters, validateArgLength
 
 def populateDatabase():
+    print("Populating database...")
     validateArgLength()
     url: str = sys.argv[1]
     sqliteDbFile: str = sys.argv[2]
