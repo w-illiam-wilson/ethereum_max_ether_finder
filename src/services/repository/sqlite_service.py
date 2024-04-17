@@ -9,7 +9,6 @@ class SQLiteService:
         self.connection: Connection = None
         self.cursor: Cursor = None
         self.createConnection()
-        self.createTable()
 
     def __del__(self):
         # body of destructor
@@ -35,7 +34,7 @@ class SQLiteService:
                     PRIMARY KEY (blockNumber, transactionIndex)
                 )""")
             self.connection.commit()
-            print("Database table created")
+            print("Database table created if it didn't exist")
         except Error as e:
             exit(e)  
 
@@ -59,3 +58,15 @@ class SQLiteService:
                 else:
                     exit(e)
         self.connection.commit()
+
+    def getMaxWei(self, firstBlock, lastBlock):
+        self.cursor.execute("""
+                SELECT
+                    blockNumber, transactionIndex
+                FROM
+                    blocks
+                WHERE
+                    weiValue = (SELECT MAX(weiValue) FROM blocks);
+                """)
+        rows = self.cursor.fetchall()
+        return rows

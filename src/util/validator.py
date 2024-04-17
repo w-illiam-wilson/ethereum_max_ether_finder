@@ -1,4 +1,5 @@
 import re
+import sys
 
 from src.models.request import BlockCrawlerRequest
 
@@ -30,3 +31,7 @@ def validateAndTransformParameters(blockCrawlerRequest: BlockCrawlerRequest):
 
     blockCrawlerRequest.firstBlock = blocks[0]
     blockCrawlerRequest.lastBlock = blocks[1]
+
+def validateArgLength():
+    if(len(sys.argv) < 4):
+        exit("you must provide url, database file, and block range")
