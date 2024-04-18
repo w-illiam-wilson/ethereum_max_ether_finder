@@ -1,11 +1,11 @@
 from tqdm import tqdm
 from src.services.ethereum.ethereum_service import EthereumMainnetService
-from src.services.repository.sqlite_service import SQLiteService
+from src.services.repository.postgres_service import PostgresService
 
 class BlockCrawlerService:
     def __init__(self, url, databaseFile):
         self.ethereumService = EthereumMainnetService(url)
-        self.sqLiteService = SQLiteService(databaseFile)
+        self.sqLiteService = PostgresService(databaseFile)
 
     def populateDatabase(self, firstBlock: int, lastBlock: int):
         self.sqLiteService.createTable()
