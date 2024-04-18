@@ -2,10 +2,12 @@
 from src.util.hex_converter import hexToInt
 import sqlite3
 from sqlite3 import Error, Connection, Cursor, Error
+from urllib.parse import urlparse
+import psycopg2
 
 class SQLiteService:
-    def __init__(self, databaseFile):
-        self.databaseFile = databaseFile
+    def __init__(self, databaseURL):
+        self.databaseURL = databaseURL
         self.connection: Connection = None
         self.cursor: Cursor = None
         self.createConnection()
@@ -16,9 +18,19 @@ class SQLiteService:
             self.connection.close()
 
     def createConnection(self):
-        """ create a database connection to a SQLite database """
+        urlParsed = urlparse(self.databaseURL)
+
+        pg_connection_dict = {
+            'dbname': urlParsed.hostname,
+            'user': urlParsed.username,
+            'password': urlParsed.password,
+            'port': urlParsed.port,
+            'host': urlParsed.scheme
+        }
+
+        print(pg_connection_dict)
         try:
-            self.connection = sqlite3.connect(self.databaseFile)
+            self.connection = psycopg2.connect(**pg_connection_dict)
             self.cursor = self.connection.cursor()
             print("Database connection created")
         except Error as e:

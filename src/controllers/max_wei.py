@@ -8,5 +8,5 @@ def getMaxWei():
     validateArguments(request)
     populateBlockRange(request)
 
-    blockCrawlerService = BlockCrawlerService(request.url, request.databaseFile)
+    blockCrawlerService = BlockCrawlerService(request.url, request.databaseURL)
     print(blockCrawlerService.getBlockWithMaxWei(request.firstBlock, request.lastBlock))

@@ -1,6 +1,6 @@
 [tool.poetry]
-name = "relayer-interview"
-version = "0.1.0"
+name = "ethereum_max_wei_finder"
+version = "1.0.0"
 description = ""
 authors = ["William Wilson <williambwilson@msn.com>"]
 readme = "README.md"

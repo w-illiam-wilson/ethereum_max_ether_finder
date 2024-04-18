@@ -8,10 +8,10 @@ def validateURL(url: str):
     if (not re.search(expression, url)):
         exit("URL is not correct")
 
-def validateDbFile(fileName: str):
-    expression = ".+.sql$"
-    if (not re.search(expression, fileName)):
-        exit("file format is not correct")
+def validateDatabaseURL(database: str):
+    expression = "^postgres:\/\/.+@.+:[0-9]+\/.+$"
+    if (not re.search(expression, database)):
+        exit("database url must be in the format `postgres://{user}@{host}:{port}/{databaseName}`")
 
 def validateBlockRange(blockRange: str) -> list:
     expression = "^[0-9]+-[0-9]+$"
@@ -31,7 +31,7 @@ def populateBlockRange(blockCrawlerRequest: BlockCrawlerRequest):
 def validateArguments(blockCrawlerRequest: BlockCrawlerRequest):
     validateArgLength()
     validateURL(blockCrawlerRequest.url)
-    validateDbFile(blockCrawlerRequest.databaseFile)
+    validateDatabaseURL(blockCrawlerRequest.databaseURL)
     validateBlockRange(blockCrawlerRequest.blockRange)
 
 def constructRequest() -> BlockCrawlerRequest:
