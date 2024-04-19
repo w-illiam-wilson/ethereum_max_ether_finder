@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
-<title>ethereum_max_wei_finder.src.services.database.postgres_service API documentation</title>
+<title>ethereum_max_wei_finder.src.services.sources.database.postgres_service API documentation</title>
 <meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
@@ -19,7 +19,7 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>ethereum_max_wei_finder.src.services.database.postgres_service</code></h1>
+<h1 class="title">Module <code>ethereum_max_wei_finder.src.services.sources.database.postgres_service</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
@@ -156,7 +156,7 @@ class PostgresService:
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="ethereum_max_wei_finder.src.services.database.postgres_service.PostgresService"><code class="flex name class">
+<dt id="ethereum_max_wei_finder.src.services.sources.database.postgres_service.PostgresService"><code class="flex name class">
 <span>class <span class="ident">PostgresService</span></span>
 <span>(</span><span>databaseURL)</span>
 </code></dt>
@@ -292,7 +292,7 @@ class PostgresService:
 </details>
 <h3>Methods</h3>
 <dl>
-<dt id="ethereum_max_wei_finder.src.services.database.postgres_service.PostgresService.createConnection"><code class="name flex">
+<dt id="ethereum_max_wei_finder.src.services.sources.database.postgres_service.PostgresService.createConnection"><code class="name flex">
 <span>def <span class="ident">createConnection</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -329,7 +329,7 @@ class PostgresService:
         exit(e)  </code></pre>
 </details>
 </dd>
-<dt id="ethereum_max_wei_finder.src.services.database.postgres_service.PostgresService.createTable"><code class="name flex">
+<dt id="ethereum_max_wei_finder.src.services.sources.database.postgres_service.PostgresService.createTable"><code class="name flex">
 <span>def <span class="ident">createTable</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -360,7 +360,7 @@ There can be multiple transactions in a block and each transaction has a wei val
         exit(e)  </code></pre>
 </details>
 </dd>
-<dt id="ethereum_max_wei_finder.src.services.database.postgres_service.PostgresService.getBlockWithMaxWei"><code class="name flex">
+<dt id="ethereum_max_wei_finder.src.services.sources.database.postgres_service.PostgresService.getBlockWithMaxWei"><code class="name flex">
 <span>def <span class="ident">getBlockWithMaxWei</span></span>(<span>self, firstBlock: int, lastBlock: int)</span>
 </code></dt>
 <dd>
@@ -404,7 +404,7 @@ There can be multiple transactions in a block and each transaction has a wei val
     return rows</code></pre>
 </details>
 </dd>
-<dt id="ethereum_max_wei_finder.src.services.database.postgres_service.PostgresService.insertBlockIntoDatabase"><code class="name flex">
+<dt id="ethereum_max_wei_finder.src.services.sources.database.postgres_service.PostgresService.insertBlockIntoDatabase"><code class="name flex">
 <span>def <span class="ident">insertBlockIntoDatabase</span></span>(<span>self, block)</span>
 </code></dt>
 <dd>
@@ -456,18 +456,18 @@ There can be multiple transactions in a block and each transaction has a wei val
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="ethereum_max_wei_finder.src.services.database" href="index.html">ethereum_max_wei_finder.src.services.database</a></code></li>
+<li><code><a title="ethereum_max_wei_finder.src.services.sources.database" href="index.html">ethereum_max_wei_finder.src.services.sources.database</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="ethereum_max_wei_finder.src.services.database.postgres_service.PostgresService" href="#ethereum_max_wei_finder.src.services.database.postgres_service.PostgresService">PostgresService</a></code></h4>
+<h4><code><a title="ethereum_max_wei_finder.src.services.sources.database.postgres_service.PostgresService" href="#ethereum_max_wei_finder.src.services.sources.database.postgres_service.PostgresService">PostgresService</a></code></h4>
 <ul class="">
-<li><code><a title="ethereum_max_wei_finder.src.services.database.postgres_service.PostgresService.createConnection" href="#ethereum_max_wei_finder.src.services.database.postgres_service.PostgresService.createConnection">createConnection</a></code></li>
-<li><code><a title="ethereum_max_wei_finder.src.services.database.postgres_service.PostgresService.createTable" href="#ethereum_max_wei_finder.src.services.database.postgres_service.PostgresService.createTable">createTable</a></code></li>
-<li><code><a title="ethereum_max_wei_finder.src.services.database.postgres_service.PostgresService.getBlockWithMaxWei" href="#ethereum_max_wei_finder.src.services.database.postgres_service.PostgresService.getBlockWithMaxWei">getBlockWithMaxWei</a></code></li>
-<li><code><a title="ethereum_max_wei_finder.src.services.database.postgres_service.PostgresService.insertBlockIntoDatabase" href="#ethereum_max_wei_finder.src.services.database.postgres_service.PostgresService.insertBlockIntoDatabase">insertBlockIntoDatabase</a></code></li>
+<li><code><a title="ethereum_max_wei_finder.src.services.sources.database.postgres_service.PostgresService.createConnection" href="#ethereum_max_wei_finder.src.services.sources.database.postgres_service.PostgresService.createConnection">createConnection</a></code></li>
+<li><code><a title="ethereum_max_wei_finder.src.services.sources.database.postgres_service.PostgresService.createTable" href="#ethereum_max_wei_finder.src.services.sources.database.postgres_service.PostgresService.createTable">createTable</a></code></li>
+<li><code><a title="ethereum_max_wei_finder.src.services.sources.database.postgres_service.PostgresService.getBlockWithMaxWei" href="#ethereum_max_wei_finder.src.services.sources.database.postgres_service.PostgresService.getBlockWithMaxWei">getBlockWithMaxWei</a></code></li>
+<li><code><a title="ethereum_max_wei_finder.src.services.sources.database.postgres_service.PostgresService.insertBlockIntoDatabase" href="#ethereum_max_wei_finder.src.services.sources.database.postgres_service.PostgresService.insertBlockIntoDatabase">insertBlockIntoDatabase</a></code></li>
 </ul>
 </li>
 </ul>

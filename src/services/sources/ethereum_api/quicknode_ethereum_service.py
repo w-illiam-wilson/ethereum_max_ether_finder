@@ -7,11 +7,11 @@ class QuickNodeEthereumAPIService:
     """Service for interacting with QuickNode Ethereum Mainnet API.
 
     Attributes:
-        apiURL (str): The url for quickNode api
+        enpoint (str): The enpoint for quickNode api
     """
 
-    def __init__(self, apiURL):
-        self.apiURL = apiURL
+    def __init__(self, enpoint):
+        self.endpoint = enpoint
 
     def getCurrentBlockNumber(self):
         """Get the most recent block added to the ethereum chain
@@ -30,7 +30,7 @@ class QuickNodeEthereumAPIService:
             'Content-Type': 'application/json'
         }
 
-        response = requests.request("POST", self.apiURL, headers=headers, data=payload)
+        response = requests.request("POST", self.endpoint, headers=headers, data=payload)
         hexOfBlockNumber = response.json()["result"]
         return hexToInt(hexOfBlockNumber)
 
@@ -60,6 +60,6 @@ class QuickNodeEthereumAPIService:
             'Content-Type': 'application/json'
         }
 
-        response = requests.request("POST", self.apiURL, headers=headers, data=payload)
+        response = requests.request("POST", self.endpoint, headers=headers, data=payload)
         #it would be better if we could create a DTO here
         return response.json()

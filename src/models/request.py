@@ -1,6 +1,6 @@
 class BlockCrawlerRequest:
-  def __init__(self, url, databaseFile, blockRange):
-    self.url = url
+  def __init__(self, endpoint, databaseFile, blockRange):
+    self.endpoint = endpoint
     self.databaseURL = databaseFile
     self.blockRange = blockRange
     self.firstBlock = None

@@ -10,5 +10,5 @@ def getBlockWithMaxWeiTransacted():
     validateArguments(request)
     populateBlockRange(request)
 
-    blockCrawlerService = BlockCrawlerService(request.url, request.databaseURL)
+    blockCrawlerService = BlockCrawlerService(request.endpoint, request.databaseURL)
     print(blockCrawlerService.getBlockWithMaxWei(request.firstBlock, request.lastBlock))

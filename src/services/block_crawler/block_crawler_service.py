@@ -1,6 +1,6 @@
 from tqdm import tqdm
-from src.services.api.quicknode_ethereum_service import QuickNodeEthereumAPIService
-from src.services.database.postgres_service import PostgresService
+from src.services.sources.ethereum_api.quicknode_ethereum_service import QuickNodeEthereumAPIService
+from src.services.sources.database.postgres_service import PostgresService
 
 class BlockCrawlerService:
     """Service for crawling blocks and finding largest wei transactions
@@ -9,8 +9,8 @@ class BlockCrawlerService:
         quickNodeAPIService: The service for interacting with the ethereum blockchain
         postgresService: The service for interacting with the postgres database
     """
-    def __init__(self, url, databaseFile):
-        self.quickNodeAPIService = QuickNodeEthereumAPIService(url)
+    def __init__(self, endpoint, databaseFile):
+        self.quickNodeAPIService = QuickNodeEthereumAPIService(endpoint)
         self.postgresService = PostgresService(databaseFile)
 
     def populateDatabase(self, firstBlock: int, lastBlock: int):

@@ -27,8 +27,8 @@
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class BlockCrawlerRequest:
-  def __init__(self, url, databaseFile, blockRange):
-    self.url = url
+  def __init__(self, endpoint, databaseFile, blockRange):
+    self.endpoint = endpoint
     self.databaseURL = databaseFile
     self.blockRange = blockRange
     self.firstBlock = None
@@ -46,7 +46,7 @@
 <dl>
 <dt id="ethereum_max_wei_finder.src.models.request.BlockCrawlerRequest"><code class="flex name class">
 <span>class <span class="ident">BlockCrawlerRequest</span></span>
-<span>(</span><span>url, databaseFile, blockRange)</span>
+<span>(</span><span>endpoint, databaseFile, blockRange)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -55,8 +55,8 @@
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class BlockCrawlerRequest:
-  def __init__(self, url, databaseFile, blockRange):
-    self.url = url
+  def __init__(self, endpoint, databaseFile, blockRange):
+    self.endpoint = endpoint
     self.databaseURL = databaseFile
     self.blockRange = blockRange
     self.firstBlock = None

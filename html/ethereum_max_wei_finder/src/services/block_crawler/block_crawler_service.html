@@ -27,8 +27,8 @@
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">from tqdm import tqdm
-from src.services.api.quicknode_ethereum_service import QuickNodeEthereumAPIService
-from src.services.database.postgres_service import PostgresService
+from src.services.sources.ethereum_api.quicknode_ethereum_service import QuickNodeEthereumAPIService
+from src.services.sources.database.postgres_service import PostgresService
 
 class BlockCrawlerService:
     &#34;&#34;&#34;Service for crawling blocks and finding largest wei transactions
@@ -37,8 +37,8 @@ class BlockCrawlerService:
         quickNodeAPIService: The service for interacting with the ethereum blockchain
         postgresService: The service for interacting with the postgres database
     &#34;&#34;&#34;
-    def __init__(self, url, databaseFile):
-        self.quickNodeAPIService = QuickNodeEthereumAPIService(url)
+    def __init__(self, endpoint, databaseFile):
+        self.quickNodeAPIService = QuickNodeEthereumAPIService(endpoint)
         self.postgresService = PostgresService(databaseFile)
 
     def populateDatabase(self, firstBlock: int, lastBlock: int):
@@ -74,7 +74,7 @@ class BlockCrawlerService:
 <dl>
 <dt id="ethereum_max_wei_finder.src.services.block_crawler.block_crawler_service.BlockCrawlerService"><code class="flex name class">
 <span>class <span class="ident">BlockCrawlerService</span></span>
-<span>(</span><span>url, databaseFile)</span>
+<span>(</span><span>endpoint, databaseFile)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Service for crawling blocks and finding largest wei transactions</p>
@@ -96,8 +96,8 @@ class BlockCrawlerService:
         quickNodeAPIService: The service for interacting with the ethereum blockchain
         postgresService: The service for interacting with the postgres database
     &#34;&#34;&#34;
-    def __init__(self, url, databaseFile):
-        self.quickNodeAPIService = QuickNodeEthereumAPIService(url)
+    def __init__(self, endpoint, databaseFile):
+        self.quickNodeAPIService = QuickNodeEthereumAPIService(endpoint)
         self.postgresService = PostgresService(databaseFile)
 
     def populateDatabase(self, firstBlock: int, lastBlock: int):

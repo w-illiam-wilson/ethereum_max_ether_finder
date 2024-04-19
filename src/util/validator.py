@@ -67,7 +67,7 @@ def validateArguments(blockCrawlerRequest: BlockCrawlerRequest):
         blockCrawlerRequest: a request object containing all the sysargs passed into the program
     """
     validateArgLength()
-    validateURL(blockCrawlerRequest.url)
+    validateURL(blockCrawlerRequest.endpoint)
     validatePostgresURL(blockCrawlerRequest.databaseURL)
     validateBlockRange(blockCrawlerRequest.blockRange)
 
