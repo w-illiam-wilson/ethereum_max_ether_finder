@@ -1,16 +1,14 @@
-import sys
 from src.models.request import BlockCrawlerRequest
 from src.services.block_crawler.block_crawler_service import BlockCrawlerService
-from src.util.validator import validateAndTransformParameters, validateArgLength
+from src.util.validator import constructRequest, populateBlockRange, validateArguments
 
 def populateDatabase():
+    """Populates a database with blocks in the provided range
+    """
     print("Populating database...")
-    validateArgLength()
-    url: str = sys.argv[1]
-    sqliteDbFile: str = sys.argv[2]
-    blockRange: str = sys.argv[3]
-    request = BlockCrawlerRequest(url, sqliteDbFile, blockRange)
-    validateAndTransformParameters(request)
+    request: BlockCrawlerRequest = constructRequest()
+    validateArguments(request)
+    populateBlockRange(request)
 
-    blockCrawlerService = BlockCrawlerService(request.url, request.databaseFile)
+    blockCrawlerService = BlockCrawlerService(request.url, request.databaseURL)
     blockCrawlerService.populateDatabase(request.firstBlock, request.lastBlock)
