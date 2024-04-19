@@ -29,3 +29,9 @@ To generate documentation, run `poetry run pdoc --html ./ --force`
 * Postgrese is used as wei can technically reach 128 bits and when adding the wei of a block together, having only 64 bits can cause integer overflow
 * The table data storing the blocks is never deleted. Ideally, this should save time in querying a block range that has already been initialized. I didn't add functionality to do this yet, though.
 * I used a controller-service pattern. The main service is the block crawler service and it relies on two subservices (ethereum api service and a service to interact with a postgres database). The controllers, invoked through main.py for now but could be transformmed into an API controller itself, are separated into one that populates the database with block info and one that queries that block info.
+
+## TODO
+* Creating a DTO for blocks
+* Adding types for connection, cursor, all paramaters
+* More specific error handling - validating QuickNode URLs
+* Implementing a logger - logging levels instead of just print
