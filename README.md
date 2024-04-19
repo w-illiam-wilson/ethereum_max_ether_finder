@@ -19,5 +19,8 @@ Ensure your postgres instance is running.
 
 ex. `poetry run python main.py https://magical-thrumming-needle.quiknode.pro/f43cee9d3c566de8afb1e03e948fc3dcaab7462b/ postgres://williamwilson@localhost:5433/williamwilson 18908800-18909050`
 
+### Documentation
+To generate documentation, run `poetry run pdoc --html src`
+
 ## TODO
 change database backing; sqlite only supports 64 bit ints and wei can be up to 128

@@ -12,6 +12,7 @@ requests = "^2.31.0"
 tqdm = "^4.66.2"
 psycopg2 = "^2.9.9"
 psycopg2-binary = "^2.9.9"
+pdoc3 = "^0.10.0"
 
 
 [build-system]
