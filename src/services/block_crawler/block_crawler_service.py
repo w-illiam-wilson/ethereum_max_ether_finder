@@ -23,6 +23,7 @@ class BlockCrawlerService:
         """
         self.postgres_service.createTable()
         #would be nice to parallelize but we don't place a limit on range of blocks so we would need to manage threads carefully
+        print("Populating table...")
         for block_number in tqdm(range(first_block, last_block + 1)):
             block = self.quicknode_api_service.getBlock(block_number)
             self.postgres_service.insertBlockIntoDatabase(block)

@@ -20,7 +20,32 @@ Generate a [quicknode endpoint](https://www.quicknode.com/core-api)
 ### Run block crawler
 `poetry run python main.py {quickNode endpoint} {postgresURL} {firstBlock}-{secondBlock}`
 
-ex. `poetry run python main.py https://magical-thrumming-needle.quiknode.pro/f43cee9d3c566de8afb1e03e948fc3dcaab7462b/ postgres://williamwilson@localhost:5433/williamwilson 18908800-18909050`
+ex.
+```
+poetry run python main.py \
+https://magical-thrumming-needle.quiknode.pro/f43cee9d3c566de8afb1e03e948fc3dcaab7462b/ \
+postgres://williamwilson@localhost:5433/williamwilson \
+18908800-18909050
+```
+
+ex log response for this command:
+```
+(base) williamwilson@Williams-MacBook-Pro-9 ethereum_max_wei_finder % poetry run python main.py \
+https://magical-thrumming-needle.quiknode.pro/f43cee9d3c566de8afb1e03e948fc3dcaab7462b/ \
+postgres://williamwilson@localhost:5433/williamwilson \
+18908800-18909050
+Populating database...
+Database connection created
+Database table created if it didn't exist
+Populating table...
+100%|█████████████████████████████████████████████████████████████████████████| 251/251 [00:45<00:00,  5.48it/s]
+Database connection closed
+Getting max wei in block range...
+Database connection created
+[(18909040, Decimal('1539772311888001651587'))]
+Database connection closed
+Block with block number 18909040 transacted the most wei in the given block range with a total of 1539772311888001651587 wei transacted
+```
 
 ## Documentation
 To generate documentation, run `poetry run pdoc --html ./ --force`
