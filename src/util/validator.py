@@ -36,7 +36,7 @@ def validatePostgresURL(database: str):
     if (not re.search(expression, database)):
         exit("database url must be in the format `postgres://{user}@{host}:{port}/{databaseName}`")
 
-def validateBlockRange(block_range: str) -> list:
+def validateBlockRange(block_range: str):
     """Validates block range format.
 
     Checks if the block range is in proper format (number-number). Exits the program if not.
@@ -74,19 +74,19 @@ def validateArguments(block_crawler_request: BlockCrawlerRequest):
     Args:
         block_crawler_request: a request object containing all the sysargs passed into the program
     """
-    validateArgLength()
     validateURL(block_crawler_request.endpoint)
     validatePostgresURL(block_crawler_request.database_url)
     validateBlockRange(block_crawler_request.block_range)
 
 def constructRequest() -> BlockCrawlerRequest:
-    """Places sysargs in an object.
+    """Validates sysargs length and places sysargs in an object.
 
-    Grabs sysargs and places them in an object. This does not validate the sysargs exist.
+    Grabs sysargs and places them in an object.
 
     Returns:
         block_crawler_request: a request object containing all the sysargs passed into the program
     """
+    validateArgLength()
     endpoint: str = sys.argv[1]
     database_url: str = sys.argv[2]
     block_range: str = sys.argv[3]

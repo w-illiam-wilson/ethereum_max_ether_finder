@@ -31,7 +31,9 @@ from src.controllers.populate_database import populateDatabase
 
 def main():
     &#34;&#34;&#34;Populates a database with blocks in the provided range.
-    Then, finds the block in the provided range that has the most wei transacted and prints it
+    Then, finds the block in the provided range that has the most wei transacted and prints it in the form of 
+    &#34;Block with block number {block} transacted the most wei in the given block range with a total of {wei} wei transacted&#34;
+    See README for how to pass sysargs in.
     &#34;&#34;&#34;
     populateDatabase()
     print(getBlockWithMaxWeiTransacted())
@@ -52,14 +54,18 @@ if __name__ == &#39;__main__&#39;:
 </code></dt>
 <dd>
 <div class="desc"><p>Populates a database with blocks in the provided range.
-Then, finds the block in the provided range that has the most wei transacted and prints it</p></div>
+Then, finds the block in the provided range that has the most wei transacted and prints it in the form of
+"Block with block number {block} transacted the most wei in the given block range with a total of {wei} wei transacted"
+See README for how to pass sysargs in.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def main():
     &#34;&#34;&#34;Populates a database with blocks in the provided range.
-    Then, finds the block in the provided range that has the most wei transacted and prints it
+    Then, finds the block in the provided range that has the most wei transacted and prints it in the form of 
+    &#34;Block with block number {block} transacted the most wei in the given block range with a total of {wei} wei transacted&#34;
+    See README for how to pass sysargs in.
     &#34;&#34;&#34;
     populateDatabase()
     print(getBlockWithMaxWeiTransacted())</code></pre>

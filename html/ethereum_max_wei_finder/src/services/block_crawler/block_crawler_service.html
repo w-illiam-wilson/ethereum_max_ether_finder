@@ -27,6 +27,7 @@
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">from tqdm import tqdm
+from src.models.response import BlockCrawlerResponse
 from src.services.sources.ethereum_api.quicknode_ethereum_service import QuickNodeEthereumAPIService
 from src.services.sources.database.postgres_service import PostgresService
 
@@ -34,15 +35,15 @@ class BlockCrawlerService:
     &#34;&#34;&#34;Service for crawling blocks and finding largest wei transactions
 
     Attributes:
-        quickNodeAPIService: The service for interacting with the ethereum blockchain
-        postgresService: The service for interacting with the postgres database
+        quicknode_api_service: The service for interacting with the ethereum blockchain
+        postgres_service: The service for interacting with the postgres database
     &#34;&#34;&#34;
-    def __init__(self, endpoint, database_url):
+    def __init__(self, endpoint: str, database_url: str):
         self.quicknode_api_service = QuickNodeEthereumAPIService(endpoint)
         self.postgres_service = PostgresService(database_url)
 
     def populateDatabase(self, first_block: int, last_block: int):
-        &#34;&#34;&#34;Adds blocks from firstBlock number to lastBlock number inclusively to a database
+        &#34;&#34;&#34;Adds blocks from first_block number to last_block number inclusively to a database
 
         Args:
             first_block: The first block in the range (inclusive)
@@ -51,10 +52,10 @@ class BlockCrawlerService:
         self.postgres_service.createTable()
         #would be nice to parallelize but we don&#39;t place a limit on range of blocks so we would need to manage threads carefully
         for block_number in tqdm(range(first_block, last_block + 1)):
-            block = self.quicknode_api_service.getBlock(block_number)[&#34;result&#34;]
+            block = self.quicknode_api_service.getBlock(block_number)
             self.postgres_service.insertBlockIntoDatabase(block)
 
-    def getBlockWithMaxWei(self, first_block: int, last_block: int):
+    def getBlockWithMaxWei(self, first_block: int, last_block: int) -&gt; BlockCrawlerResponse:
         &#34;&#34;&#34;Queries the database to find the block with the most transacted wei
 
         Args:
@@ -62,9 +63,10 @@ class BlockCrawlerService:
             last_block: The last block in the range (inclusive)
 
         Returns:
-            (blockNumber, weiTransacted) for the block with the largest total wei transacted
+            BlockCrawlerResponse: an object holding a block number and the wei the block transacted
         &#34;&#34;&#34;
-        return self.postgres_service.getBlockWithMaxWei(first_block, last_block)[0]</code></pre>
+        block, total_wei_value = self.postgres_service.getBlockWithMaxWei(first_block, last_block)
+        return BlockCrawlerResponse(block, total_wei_value)</code></pre>
 </details>
 </section>
 <section>
@@ -78,15 +80,15 @@ class BlockCrawlerService:
 <dl>
 <dt id="ethereum_max_wei_finder.src.services.block_crawler.block_crawler_service.BlockCrawlerService"><code class="flex name class">
 <span>class <span class="ident">BlockCrawlerService</span></span>
-<span>(</span><span>endpoint, database_url)</span>
+<span>(</span><span>endpoint: str, database_url: str)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Service for crawling blocks and finding largest wei transactions</p>
 <h2 id="attributes">Attributes</h2>
 <dl>
-<dt><strong><code>quickNodeAPIService</code></strong></dt>
+<dt><strong><code>quicknode_api_service</code></strong></dt>
 <dd>The service for interacting with the ethereum blockchain</dd>
-<dt><strong><code>postgresService</code></strong></dt>
+<dt><strong><code>postgres_service</code></strong></dt>
 <dd>The service for interacting with the postgres database</dd>
 </dl></div>
 <details class="source">
@@ -97,15 +99,15 @@ class BlockCrawlerService:
     &#34;&#34;&#34;Service for crawling blocks and finding largest wei transactions
 
     Attributes:
-        quickNodeAPIService: The service for interacting with the ethereum blockchain
-        postgresService: The service for interacting with the postgres database
+        quicknode_api_service: The service for interacting with the ethereum blockchain
+        postgres_service: The service for interacting with the postgres database
     &#34;&#34;&#34;
-    def __init__(self, endpoint, database_url):
+    def __init__(self, endpoint: str, database_url: str):
         self.quicknode_api_service = QuickNodeEthereumAPIService(endpoint)
         self.postgres_service = PostgresService(database_url)
 
     def populateDatabase(self, first_block: int, last_block: int):
-        &#34;&#34;&#34;Adds blocks from firstBlock number to lastBlock number inclusively to a database
+        &#34;&#34;&#34;Adds blocks from first_block number to last_block number inclusively to a database
 
         Args:
             first_block: The first block in the range (inclusive)
@@ -114,10 +116,10 @@ class BlockCrawlerService:
         self.postgres_service.createTable()
         #would be nice to parallelize but we don&#39;t place a limit on range of blocks so we would need to manage threads carefully
         for block_number in tqdm(range(first_block, last_block + 1)):
-            block = self.quicknode_api_service.getBlock(block_number)[&#34;result&#34;]
+            block = self.quicknode_api_service.getBlock(block_number)
             self.postgres_service.insertBlockIntoDatabase(block)
 
-    def getBlockWithMaxWei(self, first_block: int, last_block: int):
+    def getBlockWithMaxWei(self, first_block: int, last_block: int) -&gt; BlockCrawlerResponse:
         &#34;&#34;&#34;Queries the database to find the block with the most transacted wei
 
         Args:
@@ -125,14 +127,15 @@ class BlockCrawlerService:
             last_block: The last block in the range (inclusive)
 
         Returns:
-            (blockNumber, weiTransacted) for the block with the largest total wei transacted
+            BlockCrawlerResponse: an object holding a block number and the wei the block transacted
         &#34;&#34;&#34;
-        return self.postgres_service.getBlockWithMaxWei(first_block, last_block)[0]</code></pre>
+        block, total_wei_value = self.postgres_service.getBlockWithMaxWei(first_block, last_block)
+        return BlockCrawlerResponse(block, total_wei_value)</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
 <dt id="ethereum_max_wei_finder.src.services.block_crawler.block_crawler_service.BlockCrawlerService.getBlockWithMaxWei"><code class="name flex">
-<span>def <span class="ident">getBlockWithMaxWei</span></span>(<span>self, first_block: int, last_block: int)</span>
+<span>def <span class="ident">getBlockWithMaxWei</span></span>(<span>self, first_block: int, last_block: int) ‑> src.models.response.BlockCrawlerResponse</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Queries the database to find the block with the most transacted wei</p>
@@ -144,12 +147,15 @@ class BlockCrawlerService:
 <dd>The last block in the range (inclusive)</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>(blockNumber, weiTransacted) for the block with the largest total wei transacted</p></div>
+<dl>
+<dt><code>BlockCrawlerResponse</code></dt>
+<dd>an object holding a block number and the wei the block transacted</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def getBlockWithMaxWei(self, first_block: int, last_block: int):
+<pre><code class="python">def getBlockWithMaxWei(self, first_block: int, last_block: int) -&gt; BlockCrawlerResponse:
     &#34;&#34;&#34;Queries the database to find the block with the most transacted wei
 
     Args:
@@ -157,16 +163,17 @@ class BlockCrawlerService:
         last_block: The last block in the range (inclusive)
 
     Returns:
-        (blockNumber, weiTransacted) for the block with the largest total wei transacted
+        BlockCrawlerResponse: an object holding a block number and the wei the block transacted
     &#34;&#34;&#34;
-    return self.postgres_service.getBlockWithMaxWei(first_block, last_block)[0]</code></pre>
+    block, total_wei_value = self.postgres_service.getBlockWithMaxWei(first_block, last_block)
+    return BlockCrawlerResponse(block, total_wei_value)</code></pre>
 </details>
 </dd>
 <dt id="ethereum_max_wei_finder.src.services.block_crawler.block_crawler_service.BlockCrawlerService.populateDatabase"><code class="name flex">
 <span>def <span class="ident">populateDatabase</span></span>(<span>self, first_block: int, last_block: int)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Adds blocks from firstBlock number to lastBlock number inclusively to a database</p>
+<div class="desc"><p>Adds blocks from first_block number to last_block number inclusively to a database</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>first_block</code></strong></dt>
@@ -179,7 +186,7 @@ class BlockCrawlerService:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def populateDatabase(self, first_block: int, last_block: int):
-    &#34;&#34;&#34;Adds blocks from firstBlock number to lastBlock number inclusively to a database
+    &#34;&#34;&#34;Adds blocks from first_block number to last_block number inclusively to a database
 
     Args:
         first_block: The first block in the range (inclusive)
@@ -188,7 +195,7 @@ class BlockCrawlerService:
     self.postgres_service.createTable()
     #would be nice to parallelize but we don&#39;t place a limit on range of blocks so we would need to manage threads carefully
     for block_number in tqdm(range(first_block, last_block + 1)):
-        block = self.quicknode_api_service.getBlock(block_number)[&#34;result&#34;]
+        block = self.quicknode_api_service.getBlock(block_number)
         self.postgres_service.insertBlockIntoDatabase(block)</code></pre>
 </details>
 </dd>

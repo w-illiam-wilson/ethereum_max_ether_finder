@@ -31,13 +31,13 @@ from src.services.block_crawler.block_crawler_service import BlockCrawlerService
 from src.util.validator import constructRequest, populateBlockRange, validateArguments
 
 def populateDatabase():
-    &#34;&#34;&#34;Populates a database with blocks in the provided range
+    &#34;&#34;&#34;Validates the request, populates a database with blocks in the provided range
     &#34;&#34;&#34;
-    print(&#34;Populating database...&#34;)
     request: BlockCrawlerRequest = constructRequest()
     validateArguments(request)
     populateBlockRange(request)
 
+    print(&#34;Populating database...&#34;)
     block_crawler_service = BlockCrawlerService(request.endpoint, request.database_url)
     block_crawler_service.populateDatabase(request.first_block, request.last_block)</code></pre>
 </details>
@@ -53,19 +53,19 @@ def populateDatabase():
 <span>def <span class="ident">populateDatabase</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Populates a database with blocks in the provided range</p></div>
+<div class="desc"><p>Validates the request, populates a database with blocks in the provided range</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def populateDatabase():
-    &#34;&#34;&#34;Populates a database with blocks in the provided range
+    &#34;&#34;&#34;Validates the request, populates a database with blocks in the provided range
     &#34;&#34;&#34;
-    print(&#34;Populating database...&#34;)
     request: BlockCrawlerRequest = constructRequest()
     validateArguments(request)
     populateBlockRange(request)
 
+    print(&#34;Populating database...&#34;)
     block_crawler_service = BlockCrawlerService(request.endpoint, request.database_url)
     block_crawler_service.populateDatabase(request.first_block, request.last_block)</code></pre>
 </details>

@@ -40,7 +40,7 @@ class PostgresService:
         cursor: The cursor for interacting with the database
     &#34;&#34;&#34;
 
-    def __init__(self, database_url):
+    def __init__(self, database_url: str):
         self.database_url = database_url
         self.connection = None
         self.cursor = None
@@ -82,23 +82,23 @@ class PostgresService:
     def createTable(self):
         &#34;&#34;&#34;Creates the table for storing ethereum blocks
 
-        Creates a table with columns blockNumber, transactionIndex, and weiValue.
+        Creates a table with columns block_number, transaction_index, and wei_value.
         There can be multiple transactions in a block and each transaction has a wei value associated with it.
         &#34;&#34;&#34;
         try:
             self.cursor.execute(&#34;&#34;&#34;
-                CREATE TABLE IF NOT EXISTS blocks (
-                    blockNumber INTEGER, 
-                    transactionIndex INTEGER, 
-                    weiValue NUMERIC(128),
-                    PRIMARY KEY (blockNumber, transactionIndex)
+                CREATE TABLE IF NOT EXISTS ethereum_blocks (
+                    block_number INTEGER, 
+                    transaction_index INTEGER, 
+                    wei_value NUMERIC(128),
+                    PRIMARY KEY (block_number, transaction_index)
                 )&#34;&#34;&#34;)
             self.connection.commit()
             print(&#34;Database table created if it didn&#39;t exist&#34;)
         except Error as e:
             exit(e)  
 
-    def insertBlockIntoDatabase(self, block):
+    def insertBlockIntoDatabase(self, block: object):
         &#34;&#34;&#34;Adds a block into the database table
 
         Extracts the block number, and adds all transactions as rows to the database with an associated wei value.
@@ -106,22 +106,23 @@ class PostgresService:
         Args:
             block: The block retrieved from the api
         &#34;&#34;&#34;
+        
         block_number: int = hexToInt(block[&#34;number&#34;])
         transactions: list = block[&#34;transactions&#34;]
 
         for transaction in transactions:
-            transactionIndex = hexToInt(transaction[&#34;transactionIndex&#34;])
-            weiValue = hexToInt(transaction[&#34;value&#34;])
+            transaction_index = hexToInt(transaction[&#34;transactionIndex&#34;])
+            wei_value = hexToInt(transaction[&#34;value&#34;])
             executable = f&#39;&#39;&#39;
-                INSERT INTO blocks
-                VALUES ({block_number}, {transactionIndex}, {weiValue})
-                on conflict (blockNumber, transactionIndex) do nothing
+                INSERT INTO ethereum_blocks
+                VALUES ({block_number}, {transaction_index}, {wei_value})
+                on conflict (block_number, transaction_index) do nothing
             &#39;&#39;&#39;
             self.cursor.execute(executable)
 
         self.connection.commit()
 
-    def getBlockWithMaxWei(self, first_block: int, last_block: int):
+    def getBlockWithMaxWei(self, first_block: int, last_block: int) -&gt; list:
         &#34;&#34;&#34;Finds the block in the provided range with the most total wei transacted
 
         Args:
@@ -129,22 +130,23 @@ class PostgresService:
             last_block: The last block in the range (inclusive)
         
         Returns:
-            (blockNumber, weiTransacted) for the block with the largest total wei transacted
+            (block_number, wei_transacted) for the block with the largest total wei transacted
         &#34;&#34;&#34;
         self.cursor.execute(f&#34;&#34;&#34;
                 SELECT
-                    blockNumber, SUM(weiValue) as totalValue
+                    block_number, SUM(wei_value) as total_value
                 FROM
-                    blocks
-                WHERE blockNumber BETWEEN {first_block} AND {last_block}
+                    ethereum_blocks
+                WHERE block_number BETWEEN {first_block} AND {last_block}
                 GROUP BY
-                    blockNumber
+                    block_number
                 ORDER BY
-                    totalValue DESC
+                    total_value DESC
                 LIMIT 1
             &#34;&#34;&#34;)
         rows = self.cursor.fetchall()
-        return rows</code></pre>
+        print(rows)
+        return rows[0]</code></pre>
 </details>
 </section>
 <section>
@@ -158,7 +160,7 @@ class PostgresService:
 <dl>
 <dt id="ethereum_max_wei_finder.src.services.sources.database.postgres_service.PostgresService"><code class="flex name class">
 <span>class <span class="ident">PostgresService</span></span>
-<span>(</span><span>database_url)</span>
+<span>(</span><span>database_url: str)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Service for interacting with Postgres.</p>
@@ -184,7 +186,7 @@ class PostgresService:
         cursor: The cursor for interacting with the database
     &#34;&#34;&#34;
 
-    def __init__(self, database_url):
+    def __init__(self, database_url: str):
         self.database_url = database_url
         self.connection = None
         self.cursor = None
@@ -226,23 +228,23 @@ class PostgresService:
     def createTable(self):
         &#34;&#34;&#34;Creates the table for storing ethereum blocks
 
-        Creates a table with columns blockNumber, transactionIndex, and weiValue.
+        Creates a table with columns block_number, transaction_index, and wei_value.
         There can be multiple transactions in a block and each transaction has a wei value associated with it.
         &#34;&#34;&#34;
         try:
             self.cursor.execute(&#34;&#34;&#34;
-                CREATE TABLE IF NOT EXISTS blocks (
-                    blockNumber INTEGER, 
-                    transactionIndex INTEGER, 
-                    weiValue NUMERIC(128),
-                    PRIMARY KEY (blockNumber, transactionIndex)
+                CREATE TABLE IF NOT EXISTS ethereum_blocks (
+                    block_number INTEGER, 
+                    transaction_index INTEGER, 
+                    wei_value NUMERIC(128),
+                    PRIMARY KEY (block_number, transaction_index)
                 )&#34;&#34;&#34;)
             self.connection.commit()
             print(&#34;Database table created if it didn&#39;t exist&#34;)
         except Error as e:
             exit(e)  
 
-    def insertBlockIntoDatabase(self, block):
+    def insertBlockIntoDatabase(self, block: object):
         &#34;&#34;&#34;Adds a block into the database table
 
         Extracts the block number, and adds all transactions as rows to the database with an associated wei value.
@@ -250,22 +252,23 @@ class PostgresService:
         Args:
             block: The block retrieved from the api
         &#34;&#34;&#34;
+        
         block_number: int = hexToInt(block[&#34;number&#34;])
         transactions: list = block[&#34;transactions&#34;]
 
         for transaction in transactions:
-            transactionIndex = hexToInt(transaction[&#34;transactionIndex&#34;])
-            weiValue = hexToInt(transaction[&#34;value&#34;])
+            transaction_index = hexToInt(transaction[&#34;transactionIndex&#34;])
+            wei_value = hexToInt(transaction[&#34;value&#34;])
             executable = f&#39;&#39;&#39;
-                INSERT INTO blocks
-                VALUES ({block_number}, {transactionIndex}, {weiValue})
-                on conflict (blockNumber, transactionIndex) do nothing
+                INSERT INTO ethereum_blocks
+                VALUES ({block_number}, {transaction_index}, {wei_value})
+                on conflict (block_number, transaction_index) do nothing
             &#39;&#39;&#39;
             self.cursor.execute(executable)
 
         self.connection.commit()
 
-    def getBlockWithMaxWei(self, first_block: int, last_block: int):
+    def getBlockWithMaxWei(self, first_block: int, last_block: int) -&gt; list:
         &#34;&#34;&#34;Finds the block in the provided range with the most total wei transacted
 
         Args:
@@ -273,22 +276,23 @@ class PostgresService:
             last_block: The last block in the range (inclusive)
         
         Returns:
-            (blockNumber, weiTransacted) for the block with the largest total wei transacted
+            (block_number, wei_transacted) for the block with the largest total wei transacted
         &#34;&#34;&#34;
         self.cursor.execute(f&#34;&#34;&#34;
                 SELECT
-                    blockNumber, SUM(weiValue) as totalValue
+                    block_number, SUM(wei_value) as total_value
                 FROM
-                    blocks
-                WHERE blockNumber BETWEEN {first_block} AND {last_block}
+                    ethereum_blocks
+                WHERE block_number BETWEEN {first_block} AND {last_block}
                 GROUP BY
-                    blockNumber
+                    block_number
                 ORDER BY
-                    totalValue DESC
+                    total_value DESC
                 LIMIT 1
             &#34;&#34;&#34;)
         rows = self.cursor.fetchall()
-        return rows</code></pre>
+        print(rows)
+        return rows[0]</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -334,7 +338,7 @@ class PostgresService:
 </code></dt>
 <dd>
 <div class="desc"><p>Creates the table for storing ethereum blocks</p>
-<p>Creates a table with columns blockNumber, transactionIndex, and weiValue.
+<p>Creates a table with columns block_number, transaction_index, and wei_value.
 There can be multiple transactions in a block and each transaction has a wei value associated with it.</p></div>
 <details class="source">
 <summary>
@@ -343,16 +347,16 @@ There can be multiple transactions in a block and each transaction has a wei val
 <pre><code class="python">def createTable(self):
     &#34;&#34;&#34;Creates the table for storing ethereum blocks
 
-    Creates a table with columns blockNumber, transactionIndex, and weiValue.
+    Creates a table with columns block_number, transaction_index, and wei_value.
     There can be multiple transactions in a block and each transaction has a wei value associated with it.
     &#34;&#34;&#34;
     try:
         self.cursor.execute(&#34;&#34;&#34;
-            CREATE TABLE IF NOT EXISTS blocks (
-                blockNumber INTEGER, 
-                transactionIndex INTEGER, 
-                weiValue NUMERIC(128),
-                PRIMARY KEY (blockNumber, transactionIndex)
+            CREATE TABLE IF NOT EXISTS ethereum_blocks (
+                block_number INTEGER, 
+                transaction_index INTEGER, 
+                wei_value NUMERIC(128),
+                PRIMARY KEY (block_number, transaction_index)
             )&#34;&#34;&#34;)
         self.connection.commit()
         print(&#34;Database table created if it didn&#39;t exist&#34;)
@@ -361,7 +365,7 @@ There can be multiple transactions in a block and each transaction has a wei val
 </details>
 </dd>
 <dt id="ethereum_max_wei_finder.src.services.sources.database.postgres_service.PostgresService.getBlockWithMaxWei"><code class="name flex">
-<span>def <span class="ident">getBlockWithMaxWei</span></span>(<span>self, first_block: int, last_block: int)</span>
+<span>def <span class="ident">getBlockWithMaxWei</span></span>(<span>self, first_block: int, last_block: int) ‑> list</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Finds the block in the provided range with the most total wei transacted</p>
@@ -373,12 +377,12 @@ There can be multiple transactions in a block and each transaction has a wei val
 <dd>The last block in the range (inclusive)</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>(blockNumber, weiTransacted) for the block with the largest total wei transacted</p></div>
+<p>(block_number, wei_transacted) for the block with the largest total wei transacted</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def getBlockWithMaxWei(self, first_block: int, last_block: int):
+<pre><code class="python">def getBlockWithMaxWei(self, first_block: int, last_block: int) -&gt; list:
     &#34;&#34;&#34;Finds the block in the provided range with the most total wei transacted
 
     Args:
@@ -386,26 +390,27 @@ There can be multiple transactions in a block and each transaction has a wei val
         last_block: The last block in the range (inclusive)
     
     Returns:
-        (blockNumber, weiTransacted) for the block with the largest total wei transacted
+        (block_number, wei_transacted) for the block with the largest total wei transacted
     &#34;&#34;&#34;
     self.cursor.execute(f&#34;&#34;&#34;
             SELECT
-                blockNumber, SUM(weiValue) as totalValue
+                block_number, SUM(wei_value) as total_value
             FROM
-                blocks
-            WHERE blockNumber BETWEEN {first_block} AND {last_block}
+                ethereum_blocks
+            WHERE block_number BETWEEN {first_block} AND {last_block}
             GROUP BY
-                blockNumber
+                block_number
             ORDER BY
-                totalValue DESC
+                total_value DESC
             LIMIT 1
         &#34;&#34;&#34;)
     rows = self.cursor.fetchall()
-    return rows</code></pre>
+    print(rows)
+    return rows[0]</code></pre>
 </details>
 </dd>
 <dt id="ethereum_max_wei_finder.src.services.sources.database.postgres_service.PostgresService.insertBlockIntoDatabase"><code class="name flex">
-<span>def <span class="ident">insertBlockIntoDatabase</span></span>(<span>self, block)</span>
+<span>def <span class="ident">insertBlockIntoDatabase</span></span>(<span>self, block: object)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Adds a block into the database table</p>
@@ -419,7 +424,7 @@ There can be multiple transactions in a block and each transaction has a wei val
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def insertBlockIntoDatabase(self, block):
+<pre><code class="python">def insertBlockIntoDatabase(self, block: object):
     &#34;&#34;&#34;Adds a block into the database table
 
     Extracts the block number, and adds all transactions as rows to the database with an associated wei value.
@@ -427,16 +432,17 @@ There can be multiple transactions in a block and each transaction has a wei val
     Args:
         block: The block retrieved from the api
     &#34;&#34;&#34;
+    
     block_number: int = hexToInt(block[&#34;number&#34;])
     transactions: list = block[&#34;transactions&#34;]
 
     for transaction in transactions:
-        transactionIndex = hexToInt(transaction[&#34;transactionIndex&#34;])
-        weiValue = hexToInt(transaction[&#34;value&#34;])
+        transaction_index = hexToInt(transaction[&#34;transactionIndex&#34;])
+        wei_value = hexToInt(transaction[&#34;value&#34;])
         executable = f&#39;&#39;&#39;
-            INSERT INTO blocks
-            VALUES ({block_number}, {transactionIndex}, {weiValue})
-            on conflict (blockNumber, transactionIndex) do nothing
+            INSERT INTO ethereum_blocks
+            VALUES ({block_number}, {transaction_index}, {wei_value})
+            on conflict (block_number, transaction_index) do nothing
         &#39;&#39;&#39;
         self.cursor.execute(executable)
 

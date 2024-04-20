@@ -13,7 +13,7 @@ class PostgresService:
         cursor: The cursor for interacting with the database
     """
 
-    def __init__(self, database_url):
+    def __init__(self, database_url: str):
         self.database_url = database_url
         self.connection = None
         self.cursor = None
@@ -55,23 +55,23 @@ class PostgresService:
     def createTable(self):
         """Creates the table for storing ethereum blocks
 
-        Creates a table with columns blockNumber, transactionIndex, and weiValue.
+        Creates a table with columns block_number, transaction_index, and wei_value.
         There can be multiple transactions in a block and each transaction has a wei value associated with it.
         """
         try:
             self.cursor.execute("""
-                CREATE TABLE IF NOT EXISTS blocks (
-                    blockNumber INTEGER, 
-                    transactionIndex INTEGER, 
-                    weiValue NUMERIC(128),
-                    PRIMARY KEY (blockNumber, transactionIndex)
+                CREATE TABLE IF NOT EXISTS ethereum_blocks (
+                    block_number INTEGER, 
+                    transaction_index INTEGER, 
+                    wei_value NUMERIC(128),
+                    PRIMARY KEY (block_number, transaction_index)
                 )""")
             self.connection.commit()
             print("Database table created if it didn't exist")
         except Error as e:
             exit(e)  
 
-    def insertBlockIntoDatabase(self, block):
+    def insertBlockIntoDatabase(self, block: object):
         """Adds a block into the database table
 
         Extracts the block number, and adds all transactions as rows to the database with an associated wei value.
@@ -79,22 +79,23 @@ class PostgresService:
         Args:
             block: The block retrieved from the api
         """
+        
         block_number: int = hexToInt(block["number"])
         transactions: list = block["transactions"]
 
         for transaction in transactions:
-            transactionIndex = hexToInt(transaction["transactionIndex"])
-            weiValue = hexToInt(transaction["value"])
+            transaction_index = hexToInt(transaction["transactionIndex"])
+            wei_value = hexToInt(transaction["value"])
             executable = f'''
-                INSERT INTO blocks
-                VALUES ({block_number}, {transactionIndex}, {weiValue})
-                on conflict (blockNumber, transactionIndex) do nothing
+                INSERT INTO ethereum_blocks
+                VALUES ({block_number}, {transaction_index}, {wei_value})
+                on conflict (block_number, transaction_index) do nothing
             '''
             self.cursor.execute(executable)
 
         self.connection.commit()
 
-    def getBlockWithMaxWei(self, first_block: int, last_block: int):
+    def getBlockWithMaxWei(self, first_block: int, last_block: int) -> list:
         """Finds the block in the provided range with the most total wei transacted
 
         Args:
@@ -102,19 +103,20 @@ class PostgresService:
             last_block: The last block in the range (inclusive)
         
         Returns:
-            (blockNumber, weiTransacted) for the block with the largest total wei transacted
+            (block_number, wei_transacted) for the block with the largest total wei transacted
         """
         self.cursor.execute(f"""
                 SELECT
-                    blockNumber, SUM(weiValue) as totalValue
+                    block_number, SUM(wei_value) as total_value
                 FROM
-                    blocks
-                WHERE blockNumber BETWEEN {first_block} AND {last_block}
+                    ethereum_blocks
+                WHERE block_number BETWEEN {first_block} AND {last_block}
                 GROUP BY
-                    blockNumber
+                    block_number
                 ORDER BY
-                    totalValue DESC
+                    total_value DESC
                 LIMIT 1
             """)
         rows = self.cursor.fetchall()
-        return rows
+        print(rows)
+        return rows[0]

@@ -31,20 +31,19 @@ from src.models.response import BlockCrawlerResponse
 from src.services.block_crawler.block_crawler_service import BlockCrawlerService
 from src.util.validator import constructRequest, populateBlockRange, validateArguments
 
-def getBlockWithMaxWeiTransacted():
-    &#34;&#34;&#34;Finds the block in the provided range that has the most wei transacted and returns it
+def getBlockWithMaxWeiTransacted() -&gt; BlockCrawlerResponse:
+    &#34;&#34;&#34;Validates the request, finds the block in the provided range that has the most wei transacted and returns it
 
     Returns:
         BlockCrawlerResponse: a string response in the form of &#34;Block with block number {block} transacted the most wei in the given block range with a total of {wei} wei transacted&#34;
     &#34;&#34;&#34;
-    print(&#34;Getting max wei in block range...&#34;)
     request: BlockCrawlerRequest = constructRequest()
     validateArguments(request)
     populateBlockRange(request)
 
+    print(&#34;Getting max wei in block range...&#34;)
     blockCrawlerService = BlockCrawlerService(request.endpoint, request.database_url)
-    block, total_wei_value = blockCrawlerService.getBlockWithMaxWei(request.first_block, request.last_block)
-    return BlockCrawlerResponse(block, total_wei_value)</code></pre>
+    return blockCrawlerService.getBlockWithMaxWei(request.first_block, request.last_block)</code></pre>
 </details>
 </section>
 <section>
@@ -55,10 +54,10 @@ def getBlockWithMaxWeiTransacted():
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="ethereum_max_wei_finder.src.controllers.max_wei.getBlockWithMaxWeiTransacted"><code class="name flex">
-<span>def <span class="ident">getBlockWithMaxWeiTransacted</span></span>(<span>)</span>
+<span>def <span class="ident">getBlockWithMaxWeiTransacted</span></span>(<span>) ‑> src.models.response.BlockCrawlerResponse</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Finds the block in the provided range that has the most wei transacted and returns it</p>
+<div class="desc"><p>Validates the request, finds the block in the provided range that has the most wei transacted and returns it</p>
 <h2 id="returns">Returns</h2>
 <dl>
 <dt><code>BlockCrawlerResponse</code></dt>
@@ -68,20 +67,19 @@ def getBlockWithMaxWeiTransacted():
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def getBlockWithMaxWeiTransacted():
-    &#34;&#34;&#34;Finds the block in the provided range that has the most wei transacted and returns it
+<pre><code class="python">def getBlockWithMaxWeiTransacted() -&gt; BlockCrawlerResponse:
+    &#34;&#34;&#34;Validates the request, finds the block in the provided range that has the most wei transacted and returns it
 
     Returns:
         BlockCrawlerResponse: a string response in the form of &#34;Block with block number {block} transacted the most wei in the given block range with a total of {wei} wei transacted&#34;
     &#34;&#34;&#34;
-    print(&#34;Getting max wei in block range...&#34;)
     request: BlockCrawlerRequest = constructRequest()
     validateArguments(request)
     populateBlockRange(request)
 
+    print(&#34;Getting max wei in block range...&#34;)
     blockCrawlerService = BlockCrawlerService(request.endpoint, request.database_url)
-    block, total_wei_value = blockCrawlerService.getBlockWithMaxWei(request.first_block, request.last_block)
-    return BlockCrawlerResponse(block, total_wei_value)</code></pre>
+    return blockCrawlerService.getBlockWithMaxWei(request.first_block, request.last_block)</code></pre>
 </details>
 </dd>
 </dl>

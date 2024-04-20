@@ -38,10 +38,10 @@ class QuickNodeEthereumAPIService:
         endpoint (str): The endpoint for quickNode api
     &#34;&#34;&#34;
 
-    def __init__(self, endpoint):
+    def __init__(self, endpoint: str):
         self.endpoint = endpoint
 
-    def getCurrentBlockNumber(self):
+    def getCurrentBlockNumber(self) -&gt; int:
         &#34;&#34;&#34;Get the most recent block added to the ethereum chain
 
         Returns:
@@ -62,7 +62,7 @@ class QuickNodeEthereumAPIService:
         hex_of_block_number = response.json()[&#34;result&#34;]
         return hexToInt(hex_of_block_number)
 
-    def getBlock(self, block: int):
+    def getBlock(self, block: int) -&gt; object:
         &#34;&#34;&#34;Get the most recent block added to the ethereum chain
 
         Args:
@@ -90,7 +90,7 @@ class QuickNodeEthereumAPIService:
 
         response = requests.request(&#34;POST&#34;, self.endpoint, headers=headers, data=payload)
         #it would be better if we could create a DTO here
-        return response.json()</code></pre>
+        return response.json()[&#34;result&#34;]</code></pre>
 </details>
 </section>
 <section>
@@ -104,7 +104,7 @@ class QuickNodeEthereumAPIService:
 <dl>
 <dt id="ethereum_max_wei_finder.src.services.sources.ethereum_api.quicknode_ethereum_service.QuickNodeEthereumAPIService"><code class="flex name class">
 <span>class <span class="ident">QuickNodeEthereumAPIService</span></span>
-<span>(</span><span>endpoint)</span>
+<span>(</span><span>endpoint: str)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Service for interacting with QuickNode Ethereum Mainnet API.</p>
@@ -124,10 +124,10 @@ class QuickNodeEthereumAPIService:
         endpoint (str): The endpoint for quickNode api
     &#34;&#34;&#34;
 
-    def __init__(self, endpoint):
+    def __init__(self, endpoint: str):
         self.endpoint = endpoint
 
-    def getCurrentBlockNumber(self):
+    def getCurrentBlockNumber(self) -&gt; int:
         &#34;&#34;&#34;Get the most recent block added to the ethereum chain
 
         Returns:
@@ -148,7 +148,7 @@ class QuickNodeEthereumAPIService:
         hex_of_block_number = response.json()[&#34;result&#34;]
         return hexToInt(hex_of_block_number)
 
-    def getBlock(self, block: int):
+    def getBlock(self, block: int) -&gt; object:
         &#34;&#34;&#34;Get the most recent block added to the ethereum chain
 
         Args:
@@ -176,12 +176,12 @@ class QuickNodeEthereumAPIService:
 
         response = requests.request(&#34;POST&#34;, self.endpoint, headers=headers, data=payload)
         #it would be better if we could create a DTO here
-        return response.json()</code></pre>
+        return response.json()[&#34;result&#34;]</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
 <dt id="ethereum_max_wei_finder.src.services.sources.ethereum_api.quicknode_ethereum_service.QuickNodeEthereumAPIService.getBlock"><code class="name flex">
-<span>def <span class="ident">getBlock</span></span>(<span>self, block: int)</span>
+<span>def <span class="ident">getBlock</span></span>(<span>self, block: int) ‑> object</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Get the most recent block added to the ethereum chain</p>
@@ -199,7 +199,7 @@ class QuickNodeEthereumAPIService:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def getBlock(self, block: int):
+<pre><code class="python">def getBlock(self, block: int) -&gt; object:
     &#34;&#34;&#34;Get the most recent block added to the ethereum chain
 
     Args:
@@ -227,11 +227,11 @@ class QuickNodeEthereumAPIService:
 
     response = requests.request(&#34;POST&#34;, self.endpoint, headers=headers, data=payload)
     #it would be better if we could create a DTO here
-    return response.json()</code></pre>
+    return response.json()[&#34;result&#34;]</code></pre>
 </details>
 </dd>
 <dt id="ethereum_max_wei_finder.src.services.sources.ethereum_api.quicknode_ethereum_service.QuickNodeEthereumAPIService.getCurrentBlockNumber"><code class="name flex">
-<span>def <span class="ident">getCurrentBlockNumber</span></span>(<span>self)</span>
+<span>def <span class="ident">getCurrentBlockNumber</span></span>(<span>self) ‑> int</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Get the most recent block added to the ethereum chain</p>
@@ -241,7 +241,7 @@ class QuickNodeEthereumAPIService:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def getCurrentBlockNumber(self):
+<pre><code class="python">def getCurrentBlockNumber(self) -&gt; int:
     &#34;&#34;&#34;Get the most recent block added to the ethereum chain
 
     Returns:
