@@ -37,30 +37,34 @@ class BlockCrawlerService:
         quickNodeAPIService: The service for interacting with the ethereum blockchain
         postgresService: The service for interacting with the postgres database
     &#34;&#34;&#34;
-    def __init__(self, endpoint, databaseFile):
-        self.quickNodeAPIService = QuickNodeEthereumAPIService(endpoint)
-        self.postgresService = PostgresService(databaseFile)
+    def __init__(self, endpoint, database_url):
+        self.quicknode_api_service = QuickNodeEthereumAPIService(endpoint)
+        self.postgres_service = PostgresService(database_url)
 
-    def populateDatabase(self, firstBlock: int, lastBlock: int):
+    def populateDatabase(self, first_block: int, last_block: int):
         &#34;&#34;&#34;Adds blocks from firstBlock number to lastBlock number inclusively to a database
 
         Args:
-            firstBlock: The first block in the range (inclusive)
-            lastBlock: The last block in the range (inclusive)
+            first_block: The first block in the range (inclusive)
+            last_block: The last block in the range (inclusive)
         &#34;&#34;&#34;
-        self.postgresService.createTable()
+        self.postgres_service.createTable()
         #would be nice to parallelize but we don&#39;t place a limit on range of blocks so we would need to manage threads carefully
-        for blockNumber in tqdm(range(firstBlock, lastBlock + 1)):
-            block = self.quickNodeAPIService.getBlock(blockNumber)[&#34;result&#34;]
-            self.postgresService.insertBlockIntoDatabase(block)
+        for block_number in tqdm(range(first_block, last_block + 1)):
+            block = self.quicknode_api_service.getBlock(block_number)[&#34;result&#34;]
+            self.postgres_service.insertBlockIntoDatabase(block)
 
-    def getBlockWithMaxWei(self, firstBlock: int, lastBlock: int):
+    def getBlockWithMaxWei(self, first_block: int, last_block: int):
         &#34;&#34;&#34;Queries the database to find the block with the most transacted wei
+
+        Args:
+            first_block: The first block in the range (inclusive)
+            last_block: The last block in the range (inclusive)
 
         Returns:
             (blockNumber, weiTransacted) for the block with the largest total wei transacted
         &#34;&#34;&#34;
-        return self.postgresService.getBlockWithMaxWei(firstBlock, lastBlock)</code></pre>
+        return self.postgres_service.getBlockWithMaxWei(first_block, last_block)[0]</code></pre>
 </details>
 </section>
 <section>
@@ -74,7 +78,7 @@ class BlockCrawlerService:
 <dl>
 <dt id="ethereum_max_wei_finder.src.services.block_crawler.block_crawler_service.BlockCrawlerService"><code class="flex name class">
 <span>class <span class="ident">BlockCrawlerService</span></span>
-<span>(</span><span>endpoint, databaseFile)</span>
+<span>(</span><span>endpoint, database_url)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Service for crawling blocks and finding largest wei transactions</p>
@@ -96,81 +100,96 @@ class BlockCrawlerService:
         quickNodeAPIService: The service for interacting with the ethereum blockchain
         postgresService: The service for interacting with the postgres database
     &#34;&#34;&#34;
-    def __init__(self, endpoint, databaseFile):
-        self.quickNodeAPIService = QuickNodeEthereumAPIService(endpoint)
-        self.postgresService = PostgresService(databaseFile)
+    def __init__(self, endpoint, database_url):
+        self.quicknode_api_service = QuickNodeEthereumAPIService(endpoint)
+        self.postgres_service = PostgresService(database_url)
 
-    def populateDatabase(self, firstBlock: int, lastBlock: int):
+    def populateDatabase(self, first_block: int, last_block: int):
         &#34;&#34;&#34;Adds blocks from firstBlock number to lastBlock number inclusively to a database
 
         Args:
-            firstBlock: The first block in the range (inclusive)
-            lastBlock: The last block in the range (inclusive)
+            first_block: The first block in the range (inclusive)
+            last_block: The last block in the range (inclusive)
         &#34;&#34;&#34;
-        self.postgresService.createTable()
+        self.postgres_service.createTable()
         #would be nice to parallelize but we don&#39;t place a limit on range of blocks so we would need to manage threads carefully
-        for blockNumber in tqdm(range(firstBlock, lastBlock + 1)):
-            block = self.quickNodeAPIService.getBlock(blockNumber)[&#34;result&#34;]
-            self.postgresService.insertBlockIntoDatabase(block)
+        for block_number in tqdm(range(first_block, last_block + 1)):
+            block = self.quicknode_api_service.getBlock(block_number)[&#34;result&#34;]
+            self.postgres_service.insertBlockIntoDatabase(block)
 
-    def getBlockWithMaxWei(self, firstBlock: int, lastBlock: int):
+    def getBlockWithMaxWei(self, first_block: int, last_block: int):
         &#34;&#34;&#34;Queries the database to find the block with the most transacted wei
+
+        Args:
+            first_block: The first block in the range (inclusive)
+            last_block: The last block in the range (inclusive)
 
         Returns:
             (blockNumber, weiTransacted) for the block with the largest total wei transacted
         &#34;&#34;&#34;
-        return self.postgresService.getBlockWithMaxWei(firstBlock, lastBlock)</code></pre>
+        return self.postgres_service.getBlockWithMaxWei(first_block, last_block)[0]</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
 <dt id="ethereum_max_wei_finder.src.services.block_crawler.block_crawler_service.BlockCrawlerService.getBlockWithMaxWei"><code class="name flex">
-<span>def <span class="ident">getBlockWithMaxWei</span></span>(<span>self, firstBlock: int, lastBlock: int)</span>
+<span>def <span class="ident">getBlockWithMaxWei</span></span>(<span>self, first_block: int, last_block: int)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Queries the database to find the block with the most transacted wei</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>first_block</code></strong></dt>
+<dd>The first block in the range (inclusive)</dd>
+<dt><strong><code>last_block</code></strong></dt>
+<dd>The last block in the range (inclusive)</dd>
+</dl>
 <h2 id="returns">Returns</h2>
 <p>(blockNumber, weiTransacted) for the block with the largest total wei transacted</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def getBlockWithMaxWei(self, firstBlock: int, lastBlock: int):
+<pre><code class="python">def getBlockWithMaxWei(self, first_block: int, last_block: int):
     &#34;&#34;&#34;Queries the database to find the block with the most transacted wei
+
+    Args:
+        first_block: The first block in the range (inclusive)
+        last_block: The last block in the range (inclusive)
 
     Returns:
         (blockNumber, weiTransacted) for the block with the largest total wei transacted
     &#34;&#34;&#34;
-    return self.postgresService.getBlockWithMaxWei(firstBlock, lastBlock)</code></pre>
+    return self.postgres_service.getBlockWithMaxWei(first_block, last_block)[0]</code></pre>
 </details>
 </dd>
 <dt id="ethereum_max_wei_finder.src.services.block_crawler.block_crawler_service.BlockCrawlerService.populateDatabase"><code class="name flex">
-<span>def <span class="ident">populateDatabase</span></span>(<span>self, firstBlock: int, lastBlock: int)</span>
+<span>def <span class="ident">populateDatabase</span></span>(<span>self, first_block: int, last_block: int)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Adds blocks from firstBlock number to lastBlock number inclusively to a database</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>firstBlock</code></strong></dt>
+<dt><strong><code>first_block</code></strong></dt>
 <dd>The first block in the range (inclusive)</dd>
-<dt><strong><code>lastBlock</code></strong></dt>
+<dt><strong><code>last_block</code></strong></dt>
 <dd>The last block in the range (inclusive)</dd>
 </dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def populateDatabase(self, firstBlock: int, lastBlock: int):
+<pre><code class="python">def populateDatabase(self, first_block: int, last_block: int):
     &#34;&#34;&#34;Adds blocks from firstBlock number to lastBlock number inclusively to a database
 
     Args:
-        firstBlock: The first block in the range (inclusive)
-        lastBlock: The last block in the range (inclusive)
+        first_block: The first block in the range (inclusive)
+        last_block: The last block in the range (inclusive)
     &#34;&#34;&#34;
-    self.postgresService.createTable()
+    self.postgres_service.createTable()
     #would be nice to parallelize but we don&#39;t place a limit on range of blocks so we would need to manage threads carefully
-    for blockNumber in tqdm(range(firstBlock, lastBlock + 1)):
-        block = self.quickNodeAPIService.getBlock(blockNumber)[&#34;result&#34;]
-        self.postgresService.insertBlockIntoDatabase(block)</code></pre>
+    for block_number in tqdm(range(first_block, last_block + 1)):
+        block = self.quicknode_api_service.getBlock(block_number)[&#34;result&#34;]
+        self.postgres_service.insertBlockIntoDatabase(block)</code></pre>
 </details>
 </dd>
 </dl>

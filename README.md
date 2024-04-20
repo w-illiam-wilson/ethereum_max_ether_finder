@@ -8,7 +8,7 @@ Your postgres URL will be in the format:
 
 Ensure your postgres instance is running.
 ### Packages
-`brew install postgresql`
+Install [poetry](https://python-poetry.org/docs/)
 
 `poetry install`
 

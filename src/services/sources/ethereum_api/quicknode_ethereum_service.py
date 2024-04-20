@@ -7,11 +7,11 @@ class QuickNodeEthereumAPIService:
     """Service for interacting with QuickNode Ethereum Mainnet API.
 
     Attributes:
-        enpoint (str): The enpoint for quickNode api
+        endpoint (str): The endpoint for quickNode api
     """
 
-    def __init__(self, enpoint):
-        self.endpoint = enpoint
+    def __init__(self, endpoint):
+        self.endpoint = endpoint
 
     def getCurrentBlockNumber(self):
         """Get the most recent block added to the ethereum chain
@@ -31,8 +31,8 @@ class QuickNodeEthereumAPIService:
         }
 
         response = requests.request("POST", self.endpoint, headers=headers, data=payload)
-        hexOfBlockNumber = response.json()["result"]
-        return hexToInt(hexOfBlockNumber)
+        hex_of_block_number = response.json()["result"]
+        return hexToInt(hex_of_block_number)
 
     def getBlock(self, block: int):
         """Get the most recent block added to the ethereum chain
@@ -44,12 +44,12 @@ class QuickNodeEthereumAPIService:
             block: the block requested with attributes like number, transactions (list) 
         """
         #QuickNode expects hex of block number
-        hexOfBlockNumber = hex(block)
+        hex_of_block_number = hex(block)
 
         payload = json.dumps({
             "method": "eth_getBlockByNumber",
             "params": [
-                hexOfBlockNumber,
+                hex_of_block_number,
                 True
             ],
             "id": 1,

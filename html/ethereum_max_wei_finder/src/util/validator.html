@@ -34,22 +34,22 @@ from src.models.request import BlockCrawlerRequest
 def validateArgLength():
     &#34;&#34;&#34;Validates three args were passed in.
 
-    Checks to ensure 3 arguments (api url, database link, and block range). Exits the program if not.
+    Checks to ensure 3 arguments (api endpoint, database link, and block range). Exits the program if not.
     &#34;&#34;&#34;
     if(len(sys.argv) &lt; 4):
         exit(&#34;you must provide a quicknode url, database link, and block range&#34;)
 
-def validateURL(apiURL: str):
+def validateURL(endpoint: str):
     &#34;&#34;&#34;Validates url format.
 
     Checks if the URL passed in is in URL format. Exits the program if not.
 
     Args:
-        apiURL: The url string.
+        endpoint: The url string.
     &#34;&#34;&#34;
     #TODO: ensure url is a quicknode url, not just any url
     expression = &#34;(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})&#34;
-    if (not re.search(expression, apiURL)):
+    if (not re.search(expression, endpoint)):
         exit(&#34;URL is not correct&#34;)
 
 def validatePostgresURL(database: str):
@@ -64,40 +64,48 @@ def validatePostgresURL(database: str):
     if (not re.search(expression, database)):
         exit(&#34;database url must be in the format `postgres://{user}@{host}:{port}/{databaseName}`&#34;)
 
-def validateBlockRange(blockRange: str) -&gt; list:
+def validateBlockRange(block_range: str) -&gt; list:
     &#34;&#34;&#34;Validates block range format.
 
     Checks if the block range is in proper format (number-number). Exits the program if not.
 
     Args:
-        blockRange: The blockrange string.
+        block_range: The blockrange string.
     &#34;&#34;&#34;
     expression = &#34;^[0-9]+-[0-9]+$&#34;
-    if (not re.search(expression, blockRange)):
+    if (not re.search(expression, block_range)):
         exit(&#34;block range format is not correct&#34;)
 
-def populateBlockRange(blockCrawlerRequest: BlockCrawlerRequest):
-    blocks = blockCrawlerRequest.blockRange.split(&#34;-&#34;)
+def populateBlockRange(block_crawler_request: BlockCrawlerRequest):
+    &#34;&#34;&#34;Parses the block range and places the first and last block into request object as int.
+
+    Args:
+        block_crawler_request: The request that contains solely the endpoint, block range (not parsed), and database url.
+    &#34;&#34;&#34;
+    blocks = block_crawler_request.block_range.split(&#34;-&#34;)
     blocks[0] = int(blocks[0])
     blocks[1] = int(blocks[1])
 
-    blockCrawlerRequest.firstBlock = blocks[0]
-    blockCrawlerRequest.lastBlock = blocks[1]
+    if (blocks[1] &lt; blocks[0]):
+        exit(&#34;second block number must be greater than or equal to the first&#34;)
+
+    block_crawler_request.first_block = blocks[0]
+    block_crawler_request.last_block = blocks[1]
 
     return blocks
 
-def validateArguments(blockCrawlerRequest: BlockCrawlerRequest):
+def validateArguments(block_crawler_request: BlockCrawlerRequest):
     &#34;&#34;&#34;Validates all arguments (api url, database url, and blockrange).
 
     Checks all arguments to ensure they are valid. Exits the program if not.
 
     Args:
-        blockCrawlerRequest: a request object containing all the sysargs passed into the program
+        block_crawler_request: a request object containing all the sysargs passed into the program
     &#34;&#34;&#34;
     validateArgLength()
-    validateURL(blockCrawlerRequest.endpoint)
-    validatePostgresURL(blockCrawlerRequest.databaseURL)
-    validateBlockRange(blockCrawlerRequest.blockRange)
+    validateURL(block_crawler_request.endpoint)
+    validatePostgresURL(block_crawler_request.database_url)
+    validateBlockRange(block_crawler_request.block_range)
 
 def constructRequest() -&gt; BlockCrawlerRequest:
     &#34;&#34;&#34;Places sysargs in an object.
@@ -105,12 +113,12 @@ def constructRequest() -&gt; BlockCrawlerRequest:
     Grabs sysargs and places them in an object. This does not validate the sysargs exist.
 
     Returns:
-        blockCrawlerRequest: a request object containing all the sysargs passed into the program
+        block_crawler_request: a request object containing all the sysargs passed into the program
     &#34;&#34;&#34;
-    url: str = sys.argv[1]
-    sqliteDbFile: str = sys.argv[2]
-    blockRange: str = sys.argv[3]
-    return BlockCrawlerRequest(url, sqliteDbFile, blockRange)</code></pre>
+    endpoint: str = sys.argv[1]
+    database_url: str = sys.argv[2]
+    block_range: str = sys.argv[3]
+    return BlockCrawlerRequest(endpoint, database_url, block_range)</code></pre>
 </details>
 </section>
 <section>
@@ -128,7 +136,7 @@ def constructRequest() -&gt; BlockCrawlerRequest:
 <p>Grabs sysargs and places them in an object. This does not validate the sysargs exist.</p>
 <h2 id="returns">Returns</h2>
 <dl>
-<dt><code>blockCrawlerRequest</code></dt>
+<dt><code>block_crawler_request</code></dt>
 <dd>a request object containing all the sysargs passed into the program</dd>
 </dl></div>
 <details class="source">
@@ -141,30 +149,43 @@ def constructRequest() -&gt; BlockCrawlerRequest:
     Grabs sysargs and places them in an object. This does not validate the sysargs exist.
 
     Returns:
-        blockCrawlerRequest: a request object containing all the sysargs passed into the program
+        block_crawler_request: a request object containing all the sysargs passed into the program
     &#34;&#34;&#34;
-    url: str = sys.argv[1]
-    sqliteDbFile: str = sys.argv[2]
-    blockRange: str = sys.argv[3]
-    return BlockCrawlerRequest(url, sqliteDbFile, blockRange)</code></pre>
+    endpoint: str = sys.argv[1]
+    database_url: str = sys.argv[2]
+    block_range: str = sys.argv[3]
+    return BlockCrawlerRequest(endpoint, database_url, block_range)</code></pre>
 </details>
 </dd>
 <dt id="ethereum_max_wei_finder.src.util.validator.populateBlockRange"><code class="name flex">
-<span>def <span class="ident">populateBlockRange</span></span>(<span>blockCrawlerRequest: src.models.request.BlockCrawlerRequest)</span>
+<span>def <span class="ident">populateBlockRange</span></span>(<span>block_crawler_request: src.models.request.BlockCrawlerRequest)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Parses the block range and places the first and last block into request object as int.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>block_crawler_request</code></strong></dt>
+<dd>The request that contains solely the endpoint, block range (not parsed), and database url.</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def populateBlockRange(blockCrawlerRequest: BlockCrawlerRequest):
-    blocks = blockCrawlerRequest.blockRange.split(&#34;-&#34;)
+<pre><code class="python">def populateBlockRange(block_crawler_request: BlockCrawlerRequest):
+    &#34;&#34;&#34;Parses the block range and places the first and last block into request object as int.
+
+    Args:
+        block_crawler_request: The request that contains solely the endpoint, block range (not parsed), and database url.
+    &#34;&#34;&#34;
+    blocks = block_crawler_request.block_range.split(&#34;-&#34;)
     blocks[0] = int(blocks[0])
     blocks[1] = int(blocks[1])
 
-    blockCrawlerRequest.firstBlock = blocks[0]
-    blockCrawlerRequest.lastBlock = blocks[1]
+    if (blocks[1] &lt; blocks[0]):
+        exit(&#34;second block number must be greater than or equal to the first&#34;)
+
+    block_crawler_request.first_block = blocks[0]
+    block_crawler_request.last_block = blocks[1]
 
     return blocks</code></pre>
 </details>
@@ -174,7 +195,7 @@ def constructRequest() -&gt; BlockCrawlerRequest:
 </code></dt>
 <dd>
 <div class="desc"><p>Validates three args were passed in.</p>
-<p>Checks to ensure 3 arguments (api url, database link, and block range). Exits the program if not.</p></div>
+<p>Checks to ensure 3 arguments (api endpoint, database link, and block range). Exits the program if not.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -182,66 +203,66 @@ def constructRequest() -&gt; BlockCrawlerRequest:
 <pre><code class="python">def validateArgLength():
     &#34;&#34;&#34;Validates three args were passed in.
 
-    Checks to ensure 3 arguments (api url, database link, and block range). Exits the program if not.
+    Checks to ensure 3 arguments (api endpoint, database link, and block range). Exits the program if not.
     &#34;&#34;&#34;
     if(len(sys.argv) &lt; 4):
         exit(&#34;you must provide a quicknode url, database link, and block range&#34;)</code></pre>
 </details>
 </dd>
 <dt id="ethereum_max_wei_finder.src.util.validator.validateArguments"><code class="name flex">
-<span>def <span class="ident">validateArguments</span></span>(<span>blockCrawlerRequest: src.models.request.BlockCrawlerRequest)</span>
+<span>def <span class="ident">validateArguments</span></span>(<span>block_crawler_request: src.models.request.BlockCrawlerRequest)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Validates all arguments (api url, database url, and blockrange).</p>
 <p>Checks all arguments to ensure they are valid. Exits the program if not.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>blockCrawlerRequest</code></strong></dt>
+<dt><strong><code>block_crawler_request</code></strong></dt>
 <dd>a request object containing all the sysargs passed into the program</dd>
 </dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def validateArguments(blockCrawlerRequest: BlockCrawlerRequest):
+<pre><code class="python">def validateArguments(block_crawler_request: BlockCrawlerRequest):
     &#34;&#34;&#34;Validates all arguments (api url, database url, and blockrange).
 
     Checks all arguments to ensure they are valid. Exits the program if not.
 
     Args:
-        blockCrawlerRequest: a request object containing all the sysargs passed into the program
+        block_crawler_request: a request object containing all the sysargs passed into the program
     &#34;&#34;&#34;
     validateArgLength()
-    validateURL(blockCrawlerRequest.endpoint)
-    validatePostgresURL(blockCrawlerRequest.databaseURL)
-    validateBlockRange(blockCrawlerRequest.blockRange)</code></pre>
+    validateURL(block_crawler_request.endpoint)
+    validatePostgresURL(block_crawler_request.database_url)
+    validateBlockRange(block_crawler_request.block_range)</code></pre>
 </details>
 </dd>
 <dt id="ethereum_max_wei_finder.src.util.validator.validateBlockRange"><code class="name flex">
-<span>def <span class="ident">validateBlockRange</span></span>(<span>blockRange: str) ‑> list</span>
+<span>def <span class="ident">validateBlockRange</span></span>(<span>block_range: str) ‑> list</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Validates block range format.</p>
 <p>Checks if the block range is in proper format (number-number). Exits the program if not.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>blockRange</code></strong></dt>
+<dt><strong><code>block_range</code></strong></dt>
 <dd>The blockrange string.</dd>
 </dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def validateBlockRange(blockRange: str) -&gt; list:
+<pre><code class="python">def validateBlockRange(block_range: str) -&gt; list:
     &#34;&#34;&#34;Validates block range format.
 
     Checks if the block range is in proper format (number-number). Exits the program if not.
 
     Args:
-        blockRange: The blockrange string.
+        block_range: The blockrange string.
     &#34;&#34;&#34;
     expression = &#34;^[0-9]+-[0-9]+$&#34;
-    if (not re.search(expression, blockRange)):
+    if (not re.search(expression, block_range)):
         exit(&#34;block range format is not correct&#34;)</code></pre>
 </details>
 </dd>
@@ -274,31 +295,31 @@ def constructRequest() -&gt; BlockCrawlerRequest:
 </details>
 </dd>
 <dt id="ethereum_max_wei_finder.src.util.validator.validateURL"><code class="name flex">
-<span>def <span class="ident">validateURL</span></span>(<span>apiURL: str)</span>
+<span>def <span class="ident">validateURL</span></span>(<span>endpoint: str)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Validates url format.</p>
 <p>Checks if the URL passed in is in URL format. Exits the program if not.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>apiURL</code></strong></dt>
+<dt><strong><code>endpoint</code></strong></dt>
 <dd>The url string.</dd>
 </dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def validateURL(apiURL: str):
+<pre><code class="python">def validateURL(endpoint: str):
     &#34;&#34;&#34;Validates url format.
 
     Checks if the URL passed in is in URL format. Exits the program if not.
 
     Args:
-        apiURL: The url string.
+        endpoint: The url string.
     &#34;&#34;&#34;
     #TODO: ensure url is a quicknode url, not just any url
     expression = &#34;(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})&#34;
-    if (not re.search(expression, apiURL)):
+    if (not re.search(expression, endpoint)):
         exit(&#34;URL is not correct&#34;)</code></pre>
 </details>
 </dd>

@@ -10,5 +10,5 @@ def populateDatabase():
     validateArguments(request)
     populateBlockRange(request)
 
-    blockCrawlerService = BlockCrawlerService(request.endpoint, request.databaseURL)
-    blockCrawlerService.populateDatabase(request.firstBlock, request.lastBlock)
+    block_crawler_service = BlockCrawlerService(request.endpoint, request.database_url)
+    block_crawler_service.populateDatabase(request.first_block, request.last_block)

@@ -8,13 +8,13 @@ class PostgresService:
     """Service for interacting with Postgres.
 
     Attributes:
-        databaseURL (str): The url to connect to the database
+        database_url (str): The url to connect to the database
         connection: The connection to the database
         cursor: The cursor for interacting with the database
     """
 
-    def __init__(self, databaseURL):
-        self.databaseURL = databaseURL
+    def __init__(self, database_url):
+        self.database_url = database_url
         self.connection = None
         self.cursor = None
         self.createConnection()
@@ -31,13 +31,13 @@ class PostgresService:
 
         Parses the databaseURL passed in to the object into host, username, port, database and connects to it.
         """
-        urlParsed = urlparse(self.databaseURL)
+        parsed_url = urlparse(self.database_url)
 
-        username = urlParsed.username
-        password = urlParsed.password
-        database = urlParsed.path[1:]
-        hostname = urlParsed.hostname
-        port = urlParsed.port
+        username = parsed_url.username
+        password = parsed_url.password
+        database = parsed_url.path[1:]
+        hostname = parsed_url.hostname
+        port = parsed_url.port
 
         try:
             self.connection = psycopg2.connect(
@@ -79,7 +79,7 @@ class PostgresService:
         Args:
             block: The block retrieved from the api
         """
-        blockNumber: int = hexToInt(block["number"])
+        block_number: int = hexToInt(block["number"])
         transactions: list = block["transactions"]
 
         for transaction in transactions:
@@ -87,19 +87,19 @@ class PostgresService:
             weiValue = hexToInt(transaction["value"])
             executable = f'''
                 INSERT INTO blocks
-                VALUES ({blockNumber}, {transactionIndex}, {weiValue})
+                VALUES ({block_number}, {transactionIndex}, {weiValue})
                 on conflict (blockNumber, transactionIndex) do nothing
             '''
             self.cursor.execute(executable)
 
         self.connection.commit()
 
-    def getBlockWithMaxWei(self, firstBlock: int, lastBlock: int):
+    def getBlockWithMaxWei(self, first_block: int, last_block: int):
         """Finds the block in the provided range with the most total wei transacted
 
         Args:
-            firstBlock: The first block in the range (inclusive)
-            lastBlock: The last block in the range (inclusive)
+            first_block: The first block in the range (inclusive)
+            last_block: The last block in the range (inclusive)
         
         Returns:
             (blockNumber, weiTransacted) for the block with the largest total wei transacted
@@ -109,7 +109,7 @@ class PostgresService:
                     blockNumber, SUM(weiValue) as totalValue
                 FROM
                     blocks
-                WHERE blockNumber BETWEEN {firstBlock} AND {lastBlock}
+                WHERE blockNumber BETWEEN {first_block} AND {last_block}
                 GROUP BY
                     blockNumber
                 ORDER BY

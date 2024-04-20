@@ -35,11 +35,11 @@ class QuickNodeEthereumAPIService:
     &#34;&#34;&#34;Service for interacting with QuickNode Ethereum Mainnet API.
 
     Attributes:
-        enpoint (str): The enpoint for quickNode api
+        endpoint (str): The endpoint for quickNode api
     &#34;&#34;&#34;
 
-    def __init__(self, enpoint):
-        self.endpoint = enpoint
+    def __init__(self, endpoint):
+        self.endpoint = endpoint
 
     def getCurrentBlockNumber(self):
         &#34;&#34;&#34;Get the most recent block added to the ethereum chain
@@ -59,8 +59,8 @@ class QuickNodeEthereumAPIService:
         }
 
         response = requests.request(&#34;POST&#34;, self.endpoint, headers=headers, data=payload)
-        hexOfBlockNumber = response.json()[&#34;result&#34;]
-        return hexToInt(hexOfBlockNumber)
+        hex_of_block_number = response.json()[&#34;result&#34;]
+        return hexToInt(hex_of_block_number)
 
     def getBlock(self, block: int):
         &#34;&#34;&#34;Get the most recent block added to the ethereum chain
@@ -72,12 +72,12 @@ class QuickNodeEthereumAPIService:
             block: the block requested with attributes like number, transactions (list) 
         &#34;&#34;&#34;
         #QuickNode expects hex of block number
-        hexOfBlockNumber = hex(block)
+        hex_of_block_number = hex(block)
 
         payload = json.dumps({
             &#34;method&#34;: &#34;eth_getBlockByNumber&#34;,
             &#34;params&#34;: [
-                hexOfBlockNumber,
+                hex_of_block_number,
                 True
             ],
             &#34;id&#34;: 1,
@@ -104,14 +104,14 @@ class QuickNodeEthereumAPIService:
 <dl>
 <dt id="ethereum_max_wei_finder.src.services.sources.ethereum_api.quicknode_ethereum_service.QuickNodeEthereumAPIService"><code class="flex name class">
 <span>class <span class="ident">QuickNodeEthereumAPIService</span></span>
-<span>(</span><span>enpoint)</span>
+<span>(</span><span>endpoint)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Service for interacting with QuickNode Ethereum Mainnet API.</p>
 <h2 id="attributes">Attributes</h2>
 <dl>
-<dt><strong><code>enpoint</code></strong> :&ensp;<code>str</code></dt>
-<dd>The enpoint for quickNode api</dd>
+<dt><strong><code>endpoint</code></strong> :&ensp;<code>str</code></dt>
+<dd>The endpoint for quickNode api</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -121,11 +121,11 @@ class QuickNodeEthereumAPIService:
     &#34;&#34;&#34;Service for interacting with QuickNode Ethereum Mainnet API.
 
     Attributes:
-        enpoint (str): The enpoint for quickNode api
+        endpoint (str): The endpoint for quickNode api
     &#34;&#34;&#34;
 
-    def __init__(self, enpoint):
-        self.endpoint = enpoint
+    def __init__(self, endpoint):
+        self.endpoint = endpoint
 
     def getCurrentBlockNumber(self):
         &#34;&#34;&#34;Get the most recent block added to the ethereum chain
@@ -145,8 +145,8 @@ class QuickNodeEthereumAPIService:
         }
 
         response = requests.request(&#34;POST&#34;, self.endpoint, headers=headers, data=payload)
-        hexOfBlockNumber = response.json()[&#34;result&#34;]
-        return hexToInt(hexOfBlockNumber)
+        hex_of_block_number = response.json()[&#34;result&#34;]
+        return hexToInt(hex_of_block_number)
 
     def getBlock(self, block: int):
         &#34;&#34;&#34;Get the most recent block added to the ethereum chain
@@ -158,12 +158,12 @@ class QuickNodeEthereumAPIService:
             block: the block requested with attributes like number, transactions (list) 
         &#34;&#34;&#34;
         #QuickNode expects hex of block number
-        hexOfBlockNumber = hex(block)
+        hex_of_block_number = hex(block)
 
         payload = json.dumps({
             &#34;method&#34;: &#34;eth_getBlockByNumber&#34;,
             &#34;params&#34;: [
-                hexOfBlockNumber,
+                hex_of_block_number,
                 True
             ],
             &#34;id&#34;: 1,
@@ -209,12 +209,12 @@ class QuickNodeEthereumAPIService:
         block: the block requested with attributes like number, transactions (list) 
     &#34;&#34;&#34;
     #QuickNode expects hex of block number
-    hexOfBlockNumber = hex(block)
+    hex_of_block_number = hex(block)
 
     payload = json.dumps({
         &#34;method&#34;: &#34;eth_getBlockByNumber&#34;,
         &#34;params&#34;: [
-            hexOfBlockNumber,
+            hex_of_block_number,
             True
         ],
         &#34;id&#34;: 1,
@@ -259,8 +259,8 @@ class QuickNodeEthereumAPIService:
     }
 
     response = requests.request(&#34;POST&#34;, self.endpoint, headers=headers, data=payload)
-    hexOfBlockNumber = response.json()[&#34;result&#34;]
-    return hexToInt(hexOfBlockNumber)</code></pre>
+    hex_of_block_number = response.json()[&#34;result&#34;]
+    return hexToInt(hex_of_block_number)</code></pre>
 </details>
 </dd>
 </dl>

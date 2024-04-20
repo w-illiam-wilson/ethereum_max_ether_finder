@@ -6,7 +6,7 @@ def main():
     Then, finds the block in the provided range that has the most wei transacted and prints it
     """
     populateDatabase()
-    getBlockWithMaxWeiTransacted()
+    print(getBlockWithMaxWeiTransacted())
 
 if __name__ == '__main__':
     main()
