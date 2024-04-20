@@ -1,7 +1,7 @@
 import requests
 import json
 
-from src.util.hex_converter import hexToInt
+from src.util.hex_converter import hex_to_int
 
 class QuickNodeEthereumAPIService:
     """Service for interacting with QuickNode Ethereum Mainnet API.
@@ -13,7 +13,7 @@ class QuickNodeEthereumAPIService:
     def __init__(self, endpoint: str):
         self.endpoint = endpoint
 
-    def getCurrentBlockNumber(self) -> int:
+    def get_current_block_number(self) -> int:
         """Get the most recent block added to the ethereum chain
 
         Returns:
@@ -32,10 +32,10 @@ class QuickNodeEthereumAPIService:
 
         response = requests.request("POST", self.endpoint, headers=headers, data=payload)
         hex_of_block_number = response.json()["result"]
-        return hexToInt(hex_of_block_number)
+        return hex_to_int(hex_of_block_number)
 
-    def getBlock(self, block: int) -> object:
-        """Get the most recent block added to the ethereum chain
+    def get_block(self, block: int) -> object:
+        """Get the block requested from the Ethereum blockchain
 
         Args:
             block (int): of block requested

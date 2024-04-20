@@ -3,40 +3,40 @@ import sys
 
 from src.models.request import BlockCrawlerRequest
 
-def validateArgLength():
+def validate_arg_length():
     """Validates three args were passed in.
 
     Checks to ensure 3 arguments (api endpoint, database link, and block range). Exits the program if not.
     """
     if(len(sys.argv) < 4):
-        exit("you must provide a quicknode url, database link, and block range")
+        exit("you must provide a quicknode url, postgres database link, and block range")
 
-def validateURL(endpoint: str):
-    """Validates url format.
+def validate_quicknode_endpoint(quicknode_endpoint: str):
+    """Validates quicknode url format.
 
     Checks if the URL passed in is in URL format. Exits the program if not.
 
     Args:
-        endpoint: The url string.
+        quicknode_endpoint: The QuickNode url string.
     """
     #TODO: ensure url is a quicknode url, not just any url
     expression = "(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})"
-    if (not re.search(expression, endpoint)):
-        exit("URL is not correct")
+    if (not re.search(expression, quicknode_endpoint)):
+        exit("URL is not formatted correctly")
 
-def validatePostgresURL(database: str):
+def validate_postgres_url(database_url: str):
     """Validates database url format.
 
     Checks if the database url passed in is in proper postgres format. Exits the program if not.
 
     Args:
-        database: The url string.
+        database_url: The url string.
     """
     expression = "^postgres:\/\/.+@.+:[0-9]+\/.+$"
-    if (not re.search(expression, database)):
-        exit("database url must be in the format `postgres://{user}@{host}:{port}/{databaseName}`")
+    if (not re.search(expression, database_url)):
+        exit("database url must be in the format `postgres://{user}@{host}:{port}/{database_name}`")
 
-def validateBlockRange(block_range: str):
+def validate_block_range(block_range: str):
     """Validates block range format.
 
     Checks if the block range is in proper format (number-number). Exits the program if not.
@@ -48,7 +48,7 @@ def validateBlockRange(block_range: str):
     if (not re.search(expression, block_range)):
         exit("block range format is not correct")
 
-def populateBlockRange(block_crawler_request: BlockCrawlerRequest):
+def parse_block_range(block_crawler_request: BlockCrawlerRequest):
     """Parses the block range and places the first and last block into request object as int.
 
     Args:
@@ -66,7 +66,7 @@ def populateBlockRange(block_crawler_request: BlockCrawlerRequest):
 
     return blocks
 
-def validateArguments(block_crawler_request: BlockCrawlerRequest):
+def validate_arguments(block_crawler_request: BlockCrawlerRequest):
     """Validates all arguments (api url, database url, and blockrange).
 
     Checks all arguments to ensure they are valid. Exits the program if not.
@@ -74,11 +74,11 @@ def validateArguments(block_crawler_request: BlockCrawlerRequest):
     Args:
         block_crawler_request: a request object containing all the sysargs passed into the program
     """
-    validateURL(block_crawler_request.endpoint)
-    validatePostgresURL(block_crawler_request.database_url)
-    validateBlockRange(block_crawler_request.block_range)
+    validate_quicknode_endpoint(block_crawler_request.quicknode_endpoint)
+    validate_postgres_url(block_crawler_request.database_url)
+    validate_block_range(block_crawler_request.block_range)
 
-def constructRequest() -> BlockCrawlerRequest:
+def construct_request() -> BlockCrawlerRequest:
     """Validates sysargs length and places sysargs in an object.
 
     Grabs sysargs and places them in an object.
@@ -86,8 +86,8 @@ def constructRequest() -> BlockCrawlerRequest:
     Returns:
         block_crawler_request: a request object containing all the sysargs passed into the program
     """
-    validateArgLength()
-    endpoint: str = sys.argv[1]
+    validate_arg_length()
+    quicknode_endpoint: str = sys.argv[1]
     database_url: str = sys.argv[2]
     block_range: str = sys.argv[3]
-    return BlockCrawlerRequest(endpoint, database_url, block_range)
+    return BlockCrawlerRequest(quicknode_endpoint, database_url, block_range)

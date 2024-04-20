@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "ethereum_max_wei_finder"
+name = "ethereum_max_ether_finder"
 version = "1.0.0"
 description = ""
 authors = ["William Wilson <williambwilson@msn.com>"]
@@ -13,6 +13,7 @@ tqdm = "^4.66.2"
 psycopg2 = "^2.9.9"
 psycopg2-binary = "^2.9.9"
 pdoc3 = "^0.10.0"
+web3 = "^6.17.2"
 
 
 [build-system]

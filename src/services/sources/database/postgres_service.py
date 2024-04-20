@@ -1,8 +1,9 @@
 
-from src.util.hex_converter import hexToInt
 from urllib.parse import urlparse
 import psycopg2
 from psycopg2 import Error
+
+from src.util.hex_converter import hex_to_int
 
 class PostgresService:
     """Service for interacting with Postgres.
@@ -17,7 +18,7 @@ class PostgresService:
         self.database_url = database_url
         self.connection = None
         self.cursor = None
-        self.createConnection()
+        self.create_database_connection()
 
     def __del__(self):
         """Closes the database connection
@@ -26,7 +27,7 @@ class PostgresService:
             self.connection.close()
             print("Database connection closed")
 
-    def createConnection(self):
+    def create_database_connection(self):
         """Creates the connection to the database.
 
         Parses the databaseURL passed in to the object into host, username, port, database and connects to it.
@@ -52,7 +53,7 @@ class PostgresService:
         except Error as e:
             exit(e)  
 
-    def createTable(self):
+    def create_ethereum_blocks_table(self):
         """Creates the table for storing ethereum blocks
 
         Creates a table with columns block_number, transaction_index, and wei_value.
@@ -71,8 +72,8 @@ class PostgresService:
         except Error as e:
             exit(e)  
 
-    def insertBlockIntoDatabase(self, block: object):
-        """Adds a block into the database table
+    def insert_block_into_database(self, block: object):
+        """Adds a block into the ethereum_blocks database table
 
         Extracts the block number, and adds all transactions as rows to the database with an associated wei value.
 
@@ -80,12 +81,12 @@ class PostgresService:
             block: The block retrieved from the api
         """
         
-        block_number: int = hexToInt(block["number"])
+        block_number: int = hex_to_int(block["number"])
         transactions: list = block["transactions"]
 
         for transaction in transactions:
-            transaction_index = hexToInt(transaction["transactionIndex"])
-            wei_value = hexToInt(transaction["value"])
+            transaction_index = hex_to_int(transaction["transactionIndex"])
+            wei_value = hex_to_int(transaction["value"])
             executable = f'''
                 INSERT INTO ethereum_blocks
                 VALUES ({block_number}, {transaction_index}, {wei_value})
@@ -95,7 +96,7 @@ class PostgresService:
 
         self.connection.commit()
 
-    def getBlockWithMaxWei(self, first_block: int, last_block: int) -> list:
+    def get_block_with_max_wei(self, first_block: int, last_block: int) -> tuple:
         """Finds the block in the provided range with the most total wei transacted
 
         Args:
@@ -118,5 +119,4 @@ class PostgresService:
                 LIMIT 1
             """)
         rows = self.cursor.fetchall()
-        print(rows)
         return rows[0]
