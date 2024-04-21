@@ -1,0 +1,2 @@
+block_number, ether_transacted
+(18909040, 1539.772311888001651587)
